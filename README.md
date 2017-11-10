@@ -9,43 +9,24 @@ This program can help you order Line rides from your computer.
 
 ### Example
 
-Create a ride using `lyft ride create` and watch status updates (`-t`):
+Create a ride using `lyft ride create`. You can watch updates to the ride using 
+the `-w` flag and include desktop notifications using `-t`.
 
-```
-$ lyft -t ride create
-Enter start location: 120 ottley drive atlanta
-Enter end location (optional): candler field emory university
-Start: https://www.google.com/maps/place/33.807049,-84.384321
-       120 Ottley Dr NE, Atlanta, GA 30324, USA
-End:   https://www.google.com/maps/place/33.800894,-84.333355
-       Candler Field, Atlanta, GA 30322, USA
-
-Created Ride ID: 2323630782199829597
-
-Ride ID:     2323630782199829597
-Ride Type:   Lyft Line
-Status:      Pending
-Origin:      https://www.google.com/maps/place/33.807049,-84.384321
-             120 Ottley Dr NE, Atlanta, GA 30324, USA
-Destination: https://www.google.com/maps/place/33.800894,-84.333355
-             Candler Field, Atlanta, GA 30322, USA
-
-...
-```
+<img src="https://i.imgur.com/uT0d4ln.gif" width=480>
 
 ### Setup
 
 1. Install the program using `go get -u go.avalanche.space/lyft`.
-2. Create `$HOME/.lyft/config.json` with the following contents:
+2. Add a Google Maps Geocode API key to your `.profile`:
+```
+export GOOG_GEOCODE_KEY=<key>
+```
+3. Create `$HOME/.lyft/config.json` with the following contents:
 ```json
 {
   "ClientID": "<Lyft Client ID>",
   "ClientSecret": "<Lyft Client Secret>"
 }
-```
-3. Add a Google Maps Geocode API key to your `.profile`:
-```
-export GOOG_GEOCODE_KEY=<key>
 ```
 4. Begin requesting rides! See the example above or run `lyft -help` from Terminal.
    The first time you request a ride, you will need to authorize the program
@@ -68,7 +49,7 @@ Lyft API keys:
    URL, and hit Submit.
 4. That's it. You should be able to see your Client ID and Client Secret.
 
-Built with [`nishanths/lyft-go`](https://github.com/nishanths/lyft-go).
+Built with [`lyft-go`](https://github.com/nishanths/lyft-go).
 
 ### License
 
