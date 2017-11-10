@@ -175,7 +175,7 @@ func rideStatus(rideID string, watch, notifications bool) {
 		}
 	}
 
-	loopSleep := 10 * time.Second
+	loopSleep := 20 * time.Second
 	notified := map[string]struct{}{}
 	w := standardTabWriter()
 	fmt.Fprintln(os.Stdout)
@@ -248,9 +248,9 @@ func rideStatus(rideID string, watch, notifications bool) {
 			case lyft.StatusPending:
 				// nothing. keep going.
 			case lyft.StatusAccepted:
-				loopSleep = 30 * time.Second
+				loopSleep = 10 * time.Second
 				if detail.Origin.ETA != 0 && detail.Origin.ETA < 120*time.Second {
-					loopSleep = 10 * time.Second
+					loopSleep = 5 * time.Second
 				}
 			case lyft.StatusArrived, lyft.StatusCanceled, lyft.StatusUnknown, lyft.StatusPickedUp, lyft.StatusDroppedOff:
 				break
