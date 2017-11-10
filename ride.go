@@ -228,7 +228,7 @@ func cmdRideStatus(args []string, flags Flags) {
 				// always notify
 				notified[detail.RideStatus] = struct{}{}
 				message := fmt.Sprintf("%s %s (%s)", detail.Vehicle.Color, detail.Vehicle.Make, detail.Vehicle.LicensePlate)
-				notify(message, "Lyft "+lyft.RideStatusDisplay(detail.RideStatus), "", "")
+				notify(message, "Lyft "+lyft.RideStatusDisplay(detail.RideStatus), "")
 			}
 		}
 

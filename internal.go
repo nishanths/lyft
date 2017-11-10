@@ -71,11 +71,10 @@ func ensureInternal(c Config) Internal {
 		if inter.matches(c) {
 			// It is still in sync. We're done.
 			return inter
-		} else {
-			// Out of sync. Let's revoke the tokens here, before we
-			// end up razing the file in the upcoming steps.
-			revokeToken(c.ClientID, c.ClientSecret, inter.AccessToken)
 		}
+		// Out of sync. Let's revoke the tokens here, before we
+		// end up razing the file in the upcoming steps.
+		revokeToken(c.ClientID, c.ClientSecret, inter.AccessToken)
 	}
 
 	// At this point, we failed to read internal file (does not exist, permissions, etc.),
