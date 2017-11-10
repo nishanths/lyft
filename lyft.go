@@ -19,7 +19,6 @@ import (
 )
 
 // TODO: implement ride update <ride-id>
-// TODO: rename packages
 
 const help = `usage: lyft [flags] <ride|route>
 
