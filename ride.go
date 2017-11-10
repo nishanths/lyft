@@ -45,11 +45,11 @@ func cmdRideCreate(args []string, flags Flags) {
 	}
 
 	req := lyft.RideRequest{
-		Origin:   lyft.Location{r.Start.Lat, r.Start.Lng, r.Start.Address},
+		Origin:   lyft.Location{Latitude: r.Start.Lat, Longitude: r.Start.Lng, Address: r.Start.Address},
 		RideType: flags.rideType(),
 	}
 	if r.End != nil {
-		req.Destination = lyft.Location{r.End.Lat, r.End.Lng, r.End.Address}
+		req.Destination = lyft.Location{Latitude: r.End.Lat, Longitude: r.End.Lng, Address: r.End.Address}
 	}
 
 	if flags.dryRun {
@@ -95,7 +95,7 @@ func cmdRideCancel(args []string, flags Flags) {
 		}
 
 		if ce, ok := err.(*lyft.CancelRideError); ok {
-			input := interactiveInput(fmt.Sprintf("You will be charged %s%d for canceling. Continue? [Y/n]: ", ce.Currency, ce.Amount))
+			input := interactiveInput(fmt.Sprintf("You will be charged %s%f for canceling. Continue? [Y/n]: ", ce.Currency, ce.Amount))
 			if parseYes(input) {
 				cancelToken = ce.Token
 				continue
@@ -108,7 +108,7 @@ func cmdRideCancel(args []string, flags Flags) {
 				_, err = lyftClient.CancelRide(args[0], cancelToken)
 				// TODO: this is a lot of copy-paste from above. consider reorganizing.
 				if ce, ok := err.(*lyft.CancelRideError); ok {
-					input := interactiveInput(fmt.Sprintf("You will be charged %s%d for canceling. Continue? [Y/n]: ", ce.Currency, ce.Amount))
+					input := interactiveInput(fmt.Sprintf("You will be charged %s%f for canceling. Continue? [Y/n]: ", ce.Currency, ce.Amount))
 					if parseYes(input) {
 						cancelToken = ce.Token
 						continue
@@ -202,7 +202,7 @@ func cmdRideStatus(args []string, flags Flags) {
 			fmt.Fprintf(w, "Driver:\t%s %s, %s\n", detail.Driver.FirstName, detail.Driver.LastName, detail.Driver.Rating)
 			v := detail.Vehicle
 			fmt.Fprintf(w, "Vehicle:\t%s %s %s\n", v.Color, v.Make, v.Model)
-			fmt.Fprintf(w, "\t%s %s (%d)\n", v.LicensePlate, v.LicensePlateState, v.Year)
+			fmt.Fprintf(w, "\t%s (%d)\n", v.LicensePlate, v.Year)
 		case lyft.StatusCanceled:
 			fmt.Fprintf(w, "Cancellation fee:\t%s%d\n", detail.CancellationPrice.Currency, detail.CancellationPrice.Amount)
 			if detail.CanceledBy != "" {
@@ -222,12 +222,13 @@ func cmdRideStatus(args []string, flags Flags) {
 				// notify if we haven't already
 				if _, ok := notified[detail.RideStatus]; !ok {
 					notified[detail.RideStatus] = struct{}{}
-					notify("Lyft "+lyft.RideStatusDisplay(detail.RideStatus), "", "")
+					notify("", "Lyft "+lyft.RideStatusDisplay(detail.RideStatus), "")
 				}
 			case lyft.StatusArrived:
 				// always notify
 				notified[detail.RideStatus] = struct{}{}
-				notify("Lyft "+lyft.RideStatusDisplay(detail.RideStatus), "", "")
+				message := fmt.Sprintf("%s %s (%s)", detail.Vehicle.Color, detail.Vehicle.Make, detail.Vehicle.LicensePlate)
+				notify(message, "Lyft "+lyft.RideStatusDisplay(detail.RideStatus), "", "")
 			}
 		}
 

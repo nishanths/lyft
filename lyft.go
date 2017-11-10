@@ -236,8 +236,8 @@ func HOME() string {
 }
 
 // notify displays a system notification with the supplied arguments, if the
-// we know how to do so for the runtime operating system. Only message is required,
-// the rest of the arguments are optional.
+// we know how to do so for the runtime operating system.
+// All arguments are optional.
 func notify(message, title, subtitle string) error {
 	if runtime.GOOS != "darwin" {
 		return nil
