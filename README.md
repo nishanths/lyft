@@ -45,9 +45,9 @@ Destination: https://www.google.com/maps/place/33.800894,-84.333355
 ```
 3. Add a Google Maps Geocode API key to your `.profile`:
 ```
-export GOOG_GECODE_KEY=<key>
+export GOOG_GEOCODE_KEY=<key>
 ```
-4. Begin request rides! See the example above or run `lyft -help` from Terminal.
+4. Begin requesting rides! See the example above or run `lyft -help` from Terminal.
    The first time you request a ride, you will need to authorize the program
    to order rides on your behalf. Follow the instructions printed on the 
    command line. You will only need to do this the first time.
@@ -64,7 +64,8 @@ Lyft API keys:
 
 1. Visit https://www.lyft.com/developers/apps/new and sign in.
 2. Create a new app. Use any values for the app name and description.
-3. Enter `http://localhost:90` for the redirect URL, and hit Submit.
+3. Enter `http://localhost:90` or any unused local URL for the Redirect 
+   URL, and hit Submit.
 4. That's it. You should be able to see your Client ID and Client Secret.
 
 Built with [`nishanths/lyft-go`](https://github.com/nishanths/lyft-go).
