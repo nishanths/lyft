@@ -33,7 +33,8 @@ Ride Command
 
 Route Command
 
-  The route command can add, remove, or print saved routes. If name
+  The route command lets you save routes for future use, so you don't have
+  to enter the full locations each time you create a ride. If name
   isn't specified, the show subcommand prints all saved routes.
 
     lyft route add    <name>
