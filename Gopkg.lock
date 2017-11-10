@@ -3,9 +3,15 @@
 
 [[projects]]
   branch = "master"
+  name = "go.avalanche.space/lyft-go"
+  packages = [".","auth","auth/threeleg"]
+  revision = "a90691fce3afac75ecdeb13a3113eb0f33ab109a"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/net"
   packages = ["context","context/ctxhttp"]
-  revision = "01c190206fbdffa42f334f4b2bf2220f50e64920"
+  revision = "a337091b0525af65de94df2eb7e98bd9962dcbe2"
 
 [[projects]]
   branch = "master"
@@ -16,6 +22,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "94be94f59bc111534d642837031768fd643fb8b78f71440b6db7ecf3bc8d2b46"
+  inputs-digest = "7070e8c77e561180754e98f4545be505b3f44a61a10f0b06d206cbf25886abda"
   solver-name = "gps-cdcl"
   solver-version = 1
