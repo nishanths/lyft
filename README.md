@@ -2,7 +2,10 @@
 
 Request Lyft rides from the command line.
 
-`go get -u go.avalanche.space/lyft`
+Install: `go get -u go.avalanche.space/lyft`
+
+Lyft Line isn't available on Lyft's web application as of October 2017. 
+This program can help you order Line rides from your computer.
 
 ### Example
 
@@ -44,10 +47,10 @@ Destination: https://www.google.com/maps/place/33.800894,-84.333355
 ```
 export GOOG_GECODE_KEY=<key>
 ```
-4. Begin request rides! See the example above or run `lyft -help`.
-   The first time you request a ride, you will need to authorize the program.
-   Follow the instructions on the command line. You will only need to do this 
-   the first time.
+4. Begin request rides! See the example above or run `lyft -help` from Terminal.
+   The first time you request a ride, you will need to authorize the program
+   to order rides on your behalf. Follow the instructions printed on the 
+   command line. You will only need to do this the first time.
 
 [Create an issue](https://github.com/nishanths/lyft/issues) if you run into trouble.
 
