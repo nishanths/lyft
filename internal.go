@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"go.avalanche.space/lyft-go"
+	"go.avalanche.space/lyft-go/auth"
 	"go.avalanche.space/lyft-go/auth/threeleg"
 )
 
@@ -131,7 +132,7 @@ func revokeToken(clientID, clientSecret, a string) (http.Header, error) {
 }
 
 func obtainAuthorizationCode(c Config) string {
-	u := threeleg.AuthorizationURL(c.ClientID, []string{lyft.Public, lyft.RidesRead, lyft.Offline, lyft.RidesRequest}, "")
+	u := threeleg.AuthorizationURL(c.ClientID, []string{auth.Public, auth.RidesRead, auth.Offline, auth.RidesRequest}, "")
 
 	fmt.Fprintf(os.Stdout, "Go to the following link in your browser and click the Accept button: %s\n", u)
 	time.Sleep(1 * time.Second) // waiting helps make the successive prompt more understandable.
