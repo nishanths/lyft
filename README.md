@@ -67,6 +67,8 @@ Lyft API keys:
 3. Enter `http://localhost:90` for the redirect URL, and hit Submit.
 4. That's it. You should be able to see your Client ID and Client Secret.
 
+Built with [`nishanths/lyft-go`](https://github.com/nishanths/lyft-go).
+
 ### License
 
 BSD 3-Clause.
