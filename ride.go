@@ -232,13 +232,13 @@ func rideStatus(rideID string, watch, notifications bool) {
 				// notify if we haven't already
 				if _, ok := notified[detail.RideStatus]; !ok {
 					notified[detail.RideStatus] = struct{}{}
-					notify("", "Lyft "+lyft.RideStatusDisplay(detail.RideStatus), "")
+					notify("", "Lyft Ride "+lyft.RideStatusDisplay(detail.RideStatus), "")
 				}
 			case lyft.StatusArrived:
 				// always notify
 				notified[detail.RideStatus] = struct{}{}
 				message := fmt.Sprintf("%s %s (%s)", detail.Vehicle.Color, detail.Vehicle.Make, detail.Vehicle.LicensePlate)
-				notify(message, "Lyft "+lyft.RideStatusDisplay(detail.RideStatus), "")
+				notify(message, "Lyft Ride "+lyft.RideStatusDisplay(detail.RideStatus), "")
 			}
 		}
 
