@@ -70,7 +70,7 @@ func cmdRouteAdd(args []string, flags Flags, home string) {
 		log.Fatalf("route %q already exists; remove before re-adding", name)
 	}
 
-	startLoc, endLoc := interactiveRouteInput(geocodeClient)
+	startLoc, endLoc := interactiveRouteInput("Enter start location: ", "Enter end location (can be empty): ", geocodeClient)
 
 	// Update the routes file with the new route.
 	existing[name] = Route{Start: startLoc, End: endLoc}
@@ -101,14 +101,14 @@ func printRoute(startLoc, endLoc *Location) {
 
 // interactiveRouteInput gets the start and end location by interactive input.
 // The end location is optional and can be nil.
-func interactiveRouteInput(client func() *maps.Client) (*Location, *Location) {
-	startLoc, err := parseLocation(interactiveInput("Enter start location: "), client)
+func interactiveRouteInput(start, end string, client func() *maps.Client) (*Location, *Location) {
+	startLoc, err := parseLocation(interactiveInput(start), client)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	var endLoc *Location
-	str := interactiveInput("Enter end location (optional): ")
+	str := interactiveInput(end)
 	if str != "" {
 		e, err := parseLocation(str, client)
 		if err != nil {

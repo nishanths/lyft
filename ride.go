@@ -39,7 +39,11 @@ func cmdRideCreate(args []string, flags Flags) {
 			log.Fatalf("route %q not found", flags.routeName)
 		}
 	} else {
-		s, e := interactiveRouteInput(geocodeClient)
+		endPrompt := "Enter end location (can be empty): "
+		if flags.rideType() == lyft.RideTypeLine {
+			endPrompt = "Enter end location: "
+		}
+		s, e := interactiveRouteInput("Enter start location: ", endPrompt, geocodeClient)
 		r.Start = s
 		r.End = e
 		printRoute(s, e)
@@ -71,7 +75,7 @@ func cmdRideCreate(args []string, flags Flags) {
 	fmt.Fprintf(os.Stdout, "Created Ride ID: %s\n", created.RideID)
 
 	if flags.watch {
-		cmdRideStatus([]string{created.RideID}, flags) // kinda gross to call it like this.
+		rideStatus(created.RideID, flags.watch, flags.notifications)
 	} else {
 		os.Exit(0)
 	}
@@ -153,14 +157,18 @@ func cmdRideStatus(args []string, flags Flags) {
 		usage()
 	}
 
+	rideStatus(args[0], flags.watch, flags.notifications)
+}
+
+func rideStatus(rideID string, watch, notifications bool) {
 	inter := getInternal()
 	lyftClient := lyft.Client{AccessToken: inter.AccessToken}
 
-	detail, _, err := lyftClient.RideDetail(args[0])
+	detail, _, err := lyftClient.RideDetail(rideID)
 	if err != nil {
 		if lyft.IsTokenExpired(err) {
 			lyftClient.AccessToken = refreshAndWriteToken(inter)
-			detail, _, err = lyftClient.RideDetail(args[0])
+			detail, _, err = lyftClient.RideDetail(rideID)
 		}
 		if err != nil { // still an error?
 			log.Fatalf("fetching ride status: %s", err)
@@ -218,7 +226,7 @@ func cmdRideStatus(args []string, flags Flags) {
 		fmt.Fprintln(os.Stdout)
 
 		// Notifications.
-		if flags.notifications {
+		if notifications {
 			switch detail.RideStatus {
 			case lyft.StatusCanceled, lyft.StatusAccepted:
 				// notify if we haven't already
@@ -234,7 +242,7 @@ func cmdRideStatus(args []string, flags Flags) {
 			}
 		}
 
-		if flags.watch {
+		if watch {
 			// Set loop wait times / break.
 			switch detail.RideStatus {
 			case lyft.StatusPending:
@@ -254,11 +262,11 @@ func cmdRideStatus(args []string, flags Flags) {
 		time.Sleep(loopSleep)
 
 		// Update for next round.
-		detail, _, err = lyftClient.RideDetail(args[0])
+		detail, _, err = lyftClient.RideDetail(rideID)
 		if err != nil {
 			if lyft.IsTokenExpired(err) {
 				lyftClient.AccessToken = refreshAndWriteToken(inter)
-				detail, _, err = lyftClient.RideDetail(args[0])
+				detail, _, err = lyftClient.RideDetail(rideID)
 			}
 			if err != nil { // still an error?
 				log.Fatalf("fetching ride status: %s", err)
@@ -266,7 +274,8 @@ func cmdRideStatus(args []string, flags Flags) {
 		}
 	}
 
-	if flags.watch {
+	if watch {
+		fmt.Fprint(os.Stdout, "No more updates.\n")
 		var c chan struct{}
 		<-c // infinite wait
 	}
