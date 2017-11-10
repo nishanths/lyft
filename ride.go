@@ -42,6 +42,8 @@ func cmdRideCreate(args []string, flags Flags) {
 		s, e := interactiveRouteInput(geocodeClient)
 		r.Start = s
 		r.End = e
+		printRoute(s, e)
+		fmt.Fprintln(os.Stdout)
 	}
 
 	req := lyft.RideRequest{
@@ -69,7 +71,7 @@ func cmdRideCreate(args []string, flags Flags) {
 	fmt.Fprintf(os.Stdout, "Created Ride ID: %s\n", created.RideID)
 
 	if flags.watch {
-		cmdRideStatus(args, flags) // kinda gross to call it like this.
+		cmdRideStatus([]string{created.RideID}, flags) // kinda gross to call it like this.
 	} else {
 		os.Exit(0)
 	}

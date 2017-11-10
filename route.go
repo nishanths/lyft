@@ -79,6 +79,12 @@ func cmdRouteAdd(args []string, flags Flags, home string) {
 	}
 
 	// Print the added route.
+	printRoute(startLoc, endLoc)
+	os.Exit(0)
+}
+
+func printRoute(startLoc, endLoc *Location) {
+	// Print the added route.
 	w := standardTabWriter()
 	fmt.Fprintf(w, "Start:\t%s\n", googleMapsURL(startLoc.Lat, startLoc.Lng))
 	if startLoc.Address != "" {
@@ -91,8 +97,6 @@ func cmdRouteAdd(args []string, flags Flags, home string) {
 		}
 	}
 	w.Flush()
-
-	os.Exit(0)
 }
 
 // interactiveRouteInput gets the start and end location by interactive input.
