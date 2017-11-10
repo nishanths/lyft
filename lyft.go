@@ -22,46 +22,41 @@ import (
 
 const help = `usage: lyft [flags] <ride|route>
 
-Ride Command
+Ride command:
+The ride command can create, cancel, update, or track the status of rides. 
+The -t flag can be specified along with status to enable notifications.
 
-  The ride command can create, cancel, update, or track the status of rides. 
-  The -t flag can be specified along with status to enable notifications.
+  lyft ride create
+  lyft ride cancel <ride-id>
+  lyft ride status <ride-id>
 
-    lyft ride create
-    lyft ride cancel <ride-id>
-    lyft ride status <ride-id>
+Route command:
+The route command lets you save routes for future use, so you don't have
+to enter the full locations each time you create a ride. If name
+isn't specified, the show subcommand prints all saved routes.
 
-Route Command
+  lyft route add    <name>
+  lyft route remove <name>
+  lyft route show   [name]
 
-  The route command lets you save routes for future use, so you don't have
-  to enter the full locations each time you create a ride. If name
-  isn't specified, the show subcommand prints all saved routes.
+Location input:
+When prompted to enter a location, the input can be in either of these 
+two formats: (1) a latitude/longitude pair in the format 'lat,lng'; or
+(2) a street address.
 
-    lyft route add    <name>
-    lyft route remove <name>
-    lyft route show   [name]
+Setup:
+lyft expects a file named config.json in $HOME/.lyft with the 
+following contents. See README.md for more information.
 
-Location input
+  {
+    "ClientID": "<Lyft client ID>",
+    "ClientSecret": "<Lyft client secret>"
+  }
 
-  When prompted to enter a location, the input can be in either of these 
-  two formats: (1) a latitude/longitude pair in the format 'lat,lng'; or
-  (2) a street address.
+The environment variable GOOG_GEOCODE_KEY is used as the Google Maps
+Geocode API key for converting street addresses to latitude/longitude.
 
-Setup
-
-  lyft expects a file named config.json in $HOME/.lyft with the 
-  following contents. See README.md for more information.
-
-    {
-      "ClientID": "<Lyft client ID>",
-      "ClientSecret": "<Lyft client secret>"
-    }
-
-  The environment variable GOOG_GEOCODE_KEY is used as the Google Maps
-  Geocode API key for converting street addresses to latitude/longitude.
-
-Flags
-
+Flags:
   -c type    Ride type; one of: line, lyft, premier, lux, luxsuv (default line).
              Only 1 passenger is allowed for line rides requested by the program.
   -n         Dry-run; don't actually create or modify rides (default false).
