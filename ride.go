@@ -190,21 +190,21 @@ func rideStatus(rideID string, watch, notifications bool) {
 		switch detail.RideStatus {
 		case lyft.StatusPending:
 			orig, dest := detail.Origin, detail.Destination
-			fmt.Fprintf(w, "Origin:\t%s\n", googleMapsURL(orig.Latitude, orig.Longitude))
+			fmt.Fprintf(w, "Start:\t%s\n", googleMapsURL(orig.Latitude, orig.Longitude))
 			if orig.Address != "" {
 				fmt.Fprintf(w, "\t%s\n", orig.Address)
 			}
-			fmt.Fprintf(w, "Destination:\t%s\n", googleMapsURL(dest.Latitude, dest.Longitude))
+			fmt.Fprintf(w, "End:\t%s\n", googleMapsURL(dest.Latitude, dest.Longitude))
 			if dest.Address != "" {
 				fmt.Fprintf(w, "\t%s\n", dest.Address)
 			}
 		case lyft.StatusAccepted, lyft.StatusArrived:
 			orig, dest := detail.Origin, detail.Destination
-			fmt.Fprintf(w, "Origin:\t%s\n", googleMapsURL(orig.Latitude, orig.Longitude))
+			fmt.Fprintf(w, "Start:\t%s\n", googleMapsURL(orig.Latitude, orig.Longitude))
 			if orig.Address != "" {
 				fmt.Fprintf(w, "\t%s (ETA=%s)\n", orig.Address, orig.ETA)
 			}
-			fmt.Fprintf(w, "Destination:\t%s\n", googleMapsURL(dest.Latitude, dest.Longitude))
+			fmt.Fprintf(w, "End:\t%s\n", googleMapsURL(dest.Latitude, dest.Longitude))
 			if dest.Address != "" {
 				fmt.Fprintf(w, "\t%s (ETA=%s)\n", dest.Address, dest.ETA)
 			}
