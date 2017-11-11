@@ -17,18 +17,13 @@ the `-w` flag and include desktop notifications using `-t`.
 ### Setup
 
 1. Install the program using `go get -u go.avalanche.space/lyft`.
-2. Add a Google Maps Geocode API key to your `.profile`:
+2. Set up a Google Maps Geocode API key, a Lyft client ID, and a Lyft client secret:
 ```
 export GOOG_GEOCODE_KEY=<key>
+export LYFT_CLIENT_ID=<key>
+export LYFT_CLIENT_SECRET=<key>
 ```
-3. Create `$HOME/.lyft/config.json` with the following contents:
-```json
-{
-  "ClientID": "<Lyft Client ID>",
-  "ClientSecret": "<Lyft Client Secret>"
-}
-```
-4. Begin requesting rides! See the example above or run `lyft -help` from Terminal.
+3. Begin requesting rides! See the example above or run `lyft -help` from Terminal.
    The first time you request a ride, you will need to authorize the program
    to order rides on your behalf. Follow the instructions printed on the 
    command line. You will only need to do this the first time.
