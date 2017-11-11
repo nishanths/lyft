@@ -23,7 +23,7 @@ import (
 const help = `usage: lyft [flags] <ride|route>
 
 Ride subcommand:
-The ride subcommand can create, cancel, update, or track the status of rides. 
+The ride subcommand can create, cancel, or track the status of rides.
 
   lyft ride create
   lyft ride cancel <ride-id>
