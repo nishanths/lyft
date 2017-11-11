@@ -94,37 +94,32 @@ func cmdRideCancel(args []string, flags Flags) {
 	}
 
 	var cancelToken string
-	for {
-		_, err := lyftClient.CancelRide(args[0], cancelToken)
-		if err == nil {
-			os.Exit(0)
-		}
+	var expireRetry bool
 
-		if ce, ok := err.(*lyft.CancelRideError); ok {
-			input := interactiveInput(fmt.Sprintf("You will be charged %s%f for canceling. Continue? [Y/n]: ", ce.Currency, ce.Amount))
-			if parseYes(input) {
-				cancelToken = ce.Token
-				continue
-			}
-			fmt.Fprintf(os.Stdout, "Not making any changes.")
-			os.Exit(0)
-		} else {
-			if lyft.IsTokenExpired(err) {
-				lyftClient.AccessToken = refreshAndWriteToken(inter)
-				_, err = lyftClient.CancelRide(args[0], cancelToken)
-				// TODO: this is a lot of copy-paste from above. consider reorganizing.
-				if ce, ok := err.(*lyft.CancelRideError); ok {
-					input := interactiveInput(fmt.Sprintf("You will be charged %s%f for canceling. Continue? [Y/n]: ", ce.Currency, ce.Amount))
-					if parseYes(input) {
-						cancelToken = ce.Token
-						continue
-					}
-					fmt.Fprintf(os.Stdout, "Not making any changes.")
-					os.Exit(0)
-				}
-			}
-			log.Fatalf("failed to cancel ride %s: %s", args[0], err)
+cancel:
+	_, err := lyftClient.CancelRide(args[0], cancelToken)
+	if err == nil {
+		os.Exit(0)
+	}
+
+	if ce, ok := err.(*lyft.CancelRideError); ok {
+		input := interactiveInput(fmt.Sprintf("You will be charged %s%f for canceling. Continue? [Y/n]: ", ce.Currency, ce.Amount))
+		if parseYes(input) {
+			cancelToken = ce.Token
+			goto cancel
 		}
+		fmt.Fprintf(os.Stdout, "Not making any changes.")
+		os.Exit(0)
+	}
+
+	if expireRetry {
+		log.Fatalf("failed to cancel ride %s: %s", args[0], err)
+	}
+
+	if lyft.IsTokenExpired(err) {
+		lyftClient.AccessToken = refreshAndWriteToken(inter)
+		expireRetry = true
+		goto cancel
 	}
 }
 

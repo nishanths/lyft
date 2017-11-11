@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -34,17 +35,18 @@ func (i Internal) matches(c Config) bool {
 }
 
 func readConfig() (c Config, err error) {
-	cfg, err := ioutil.ReadFile(filepath.Join(HOME(), rootDir, configFile))
-	if err != nil {
-		if os.IsNotExist(err) {
-			return c, fmt.Errorf("failed to find config.json at %s", filepath.Join(HOME(), rootDir, configFile))
-		}
-		return c, fmt.Errorf("reading config.json: %s", err)
+	i := os.Getenv("LYFT_CLIENT_ID")
+	if i == "" {
+		return Config{}, errors.New("LYFT_CLIENT_ID must be set")
 	}
-	if err := json.Unmarshal(cfg, &c); err != nil {
-		return c, fmt.Errorf("unmarshaling config: %s", err)
+	s := os.Getenv("LYFT_CLIENT_SECRET")
+	if s == "" {
+		return Config{}, errors.New("LYFT_CLIENT_SECRET must be set")
 	}
-	return c, nil
+	return Config{
+		ClientID:     i,
+		ClientSecret: s,
+	}, nil
 }
 
 func getInternal() Internal {
