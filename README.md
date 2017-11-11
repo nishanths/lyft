@@ -11,7 +11,8 @@ This program can help you order Line rides from your computer.
 
 Create a ride using `lyft ride create`. 
 
-See `lyft -help` for more commands.
+See `lyft -help` for more commands such as canceling rides, checking the
+status of rides, and saving predefined routes to use for rides.
 
 <img src="https://i.imgur.com/uT0d4ln.gif" width=480>
 
