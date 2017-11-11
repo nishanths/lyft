@@ -172,6 +172,13 @@ func rideStatus(rideID string, watch, notifications bool) {
 
 	loopSleep := 20 * time.Second
 	notified := make(map[string]bool)
+	notifyOnce := func(r, message, title, subtitle string) {
+		if notified[r] {
+			return
+		}
+		notified[r] = true
+		notify(message, title, subtitle)
+	}
 	w := standardTabWriter()
 
 	fmt.Fprintln(os.Stdout)
@@ -195,20 +202,17 @@ loop:
 		fmt.Fprintln(os.Stdout)
 
 		if notifications {
+			title := "Lyft Ride " + lyft.RideStatusDisplay(detail.RideStatus)
 			switch detail.RideStatus {
-			case lyft.StatusCanceled, lyft.StatusAccepted:
-				title := "Lyft Ride " + lyft.RideStatusDisplay(detail.RideStatus)
-				if !notified[detail.RideStatus] {
-					notified[detail.RideStatus] = true
-					notify("", title, "")
-				}
+			case lyft.StatusCanceled:
+				message := "Ride ID " + detail.RideID + " has been canceled"
+				notifyOnce(detail.RideStatus, message, title, "")
+			case lyft.StatusAccepted:
+				message := "Ride ID " + detail.RideID + " has been accepted"
+				notifyOnce(detail.RideStatus, message, title, "")
 			case lyft.StatusArrived:
-				message := fmt.Sprintf("%s %s (%s)", detail.Vehicle.Color, detail.Vehicle.Make, detail.Vehicle.LicensePlate)
-				title := "Lyft Ride " + lyft.RideStatusDisplay(detail.RideStatus)
-				if !notified[detail.RideStatus] {
-					notified[detail.RideStatus] = true
-					notify(message, title, "")
-				}
+				message := fmt.Sprintf("%s %s %s (%s)", detail.Vehicle.Color, detail.Vehicle.Make, detail.Vehicle.Model, detail.Vehicle.LicensePlate)
+				notifyOnce(detail.RideStatus, message, title, "")
 			}
 		}
 
