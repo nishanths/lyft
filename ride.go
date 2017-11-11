@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strings"
@@ -151,7 +152,6 @@ func cmdRideStatus(args []string, flags Flags) {
 	if len(args) == 0 {
 		usage()
 	}
-
 	rideStatus(args[0], flags.watch, flags.notifications)
 }
 
@@ -171,87 +171,62 @@ func rideStatus(rideID string, watch, notifications bool) {
 	}
 
 	loopSleep := 20 * time.Second
-	notified := map[string]struct{}{}
+	notified := make(map[string]bool)
 	w := standardTabWriter()
+
 	fmt.Fprintln(os.Stdout)
 	fmt.Fprintf(w, "Ride ID:\t%s\n", detail.RideID)
 	fmt.Fprintf(w, "Ride Type:\t%s\n", lyft.RideTypeDisplay(detail.RideType))
 
 	// None of this is expected to run into the rate limit.
-
+loop:
 	for {
-		// Print info.
+		// Print status info.
 		fmt.Fprintf(w, "Status:\t%s\n", lyft.RideStatusDisplay(detail.RideStatus))
 		switch detail.RideStatus {
 		case lyft.StatusPending:
-			orig, dest := detail.Origin, detail.Destination
-			fmt.Fprintf(w, "Start:\t%s\n", googleMapsURL(orig.Latitude, orig.Longitude))
-			if orig.Address != "" {
-				fmt.Fprintf(w, "\t%s\n", orig.Address)
-			}
-			fmt.Fprintf(w, "End:\t%s\n", googleMapsURL(dest.Latitude, dest.Longitude))
-			if dest.Address != "" {
-				fmt.Fprintf(w, "\t%s\n", dest.Address)
-			}
+			printPending(w, detail)
 		case lyft.StatusAccepted, lyft.StatusArrived:
-			orig, dest := detail.Origin, detail.Destination
-			fmt.Fprintf(w, "Start:\t%s\n", googleMapsURL(orig.Latitude, orig.Longitude))
-			if orig.Address != "" {
-				fmt.Fprintf(w, "\t%s (ETA=%s)\n", orig.Address, orig.ETA)
-			}
-			fmt.Fprintf(w, "End:\t%s\n", googleMapsURL(dest.Latitude, dest.Longitude))
-			if dest.Address != "" {
-				fmt.Fprintf(w, "\t%s (ETA=%s)\n", dest.Address, dest.ETA)
-			}
-			fmt.Fprintf(w, "Location:\t%s\n", googleMapsURL(detail.Location.Latitude, detail.Location.Longitude))
-			fmt.Fprintf(w, "Driver:\t%s %s, %s\n", detail.Driver.FirstName, detail.Driver.LastName, detail.Driver.Rating)
-			v := detail.Vehicle
-			fmt.Fprintf(w, "Vehicle:\t%s %s %s\n", v.Color, v.Make, v.Model)
-			fmt.Fprintf(w, "\t%s (%d)\n", v.LicensePlate, v.Year)
+			printAcceptedArrived(w, detail)
 		case lyft.StatusCanceled:
-			fmt.Fprintf(w, "Cancellation fee:\t%s%d\n", detail.CancellationPrice.Currency, detail.CancellationPrice.Amount)
-			if detail.CanceledBy != "" {
-				fmt.Fprintf(w, "Canceled by:\t%s\n", detail.CanceledBy)
-			}
-
-		case lyft.StatusUnknown, lyft.StatusPickedUp, lyft.StatusDroppedOff:
-			// Nothing extra.
+			printCanceled(w, detail)
 		}
 		w.Flush()
 		fmt.Fprintln(os.Stdout)
 
-		// Notifications.
 		if notifications {
 			switch detail.RideStatus {
 			case lyft.StatusCanceled, lyft.StatusAccepted:
-				// notify if we haven't already
-				if _, ok := notified[detail.RideStatus]; !ok {
-					notified[detail.RideStatus] = struct{}{}
-					notify("", "Lyft Ride "+lyft.RideStatusDisplay(detail.RideStatus), "")
+				title := "Lyft Ride " + lyft.RideStatusDisplay(detail.RideStatus)
+				if !notified[detail.RideStatus] {
+					notified[detail.RideStatus] = true
+					notify("", title, "")
 				}
 			case lyft.StatusArrived:
-				// always notify
-				notified[detail.RideStatus] = struct{}{}
 				message := fmt.Sprintf("%s %s (%s)", detail.Vehicle.Color, detail.Vehicle.Make, detail.Vehicle.LicensePlate)
-				notify(message, "Lyft Ride "+lyft.RideStatusDisplay(detail.RideStatus), "")
+				title := "Lyft Ride " + lyft.RideStatusDisplay(detail.RideStatus)
+				if !notified[detail.RideStatus] {
+					notified[detail.RideStatus] = true
+					notify(message, title, "")
+				}
 			}
 		}
 
 		if watch {
-			// Set loop wait times / break.
+			// Set loop wait times/break.
 			switch detail.RideStatus {
 			case lyft.StatusPending:
-				// nothing. keep going.
+				// No change. Keep looping at same interval.
 			case lyft.StatusAccepted:
 				loopSleep = 10 * time.Second
 				if detail.Origin.ETA != 0 && detail.Origin.ETA < 120*time.Second {
 					loopSleep = 5 * time.Second
 				}
-			case lyft.StatusArrived, lyft.StatusCanceled, lyft.StatusUnknown, lyft.StatusPickedUp, lyft.StatusDroppedOff:
-				break
+			default:
+				break loop
 			}
 		} else {
-			break
+			break loop
 		}
 
 		time.Sleep(loopSleep)
@@ -276,4 +251,40 @@ func rideStatus(rideID string, watch, notifications bool) {
 	}
 
 	os.Exit(0)
+}
+
+func printPending(w io.Writer, detail lyft.RideDetail) {
+	orig, dest := detail.Origin, detail.Destination
+	fmt.Fprintf(w, "Start:\t%s\n", googleMapsURL(orig.Latitude, orig.Longitude))
+	if orig.Address != "" {
+		fmt.Fprintf(w, "\t%s\n", orig.Address)
+	}
+	fmt.Fprintf(w, "End:\t%s\n", googleMapsURL(dest.Latitude, dest.Longitude))
+	if dest.Address != "" {
+		fmt.Fprintf(w, "\t%s\n", dest.Address)
+	}
+}
+
+func printAcceptedArrived(w io.Writer, detail lyft.RideDetail) {
+	orig, dest := detail.Origin, detail.Destination
+	fmt.Fprintf(w, "Start:\t%s\n", googleMapsURL(orig.Latitude, orig.Longitude))
+	if orig.Address != "" {
+		fmt.Fprintf(w, "\t%s (ETA=%s)\n", orig.Address, orig.ETA)
+	}
+	fmt.Fprintf(w, "End:\t%s\n", googleMapsURL(dest.Latitude, dest.Longitude))
+	if dest.Address != "" {
+		fmt.Fprintf(w, "\t%s (ETA=%s)\n", dest.Address, dest.ETA)
+	}
+	fmt.Fprintf(w, "Location:\t%s\n", googleMapsURL(detail.Location.Latitude, detail.Location.Longitude))
+	fmt.Fprintf(w, "Driver:\t%s %s, %s\n", detail.Driver.FirstName, detail.Driver.LastName, detail.Driver.Rating)
+	v := detail.Vehicle
+	fmt.Fprintf(w, "Vehicle:\t%s %s %s\n", v.Color, v.Make, v.Model)
+	fmt.Fprintf(w, "\t%s (%d)\n", v.LicensePlate, v.Year)
+}
+
+func printCanceled(w io.Writer, detail lyft.RideDetail) {
+	fmt.Fprintf(w, "Cancellation fee:\t%s%d\n", detail.CancellationPrice.Currency, detail.CancellationPrice.Amount)
+	if detail.CanceledBy != "" {
+		fmt.Fprintf(w, "Canceled by:\t%s\n", strings.Title(detail.CanceledBy))
+	}
 }
