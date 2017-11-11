@@ -15,7 +15,7 @@ const geocodeEnv = "GOOG_GEOCODE_KEY"
 func geocodeKey() string {
 	key := os.Getenv(geocodeEnv)
 	if key == "" {
-		log.Fatalf("%s is empty; must contain a Google Maps Geocode API key", geocodeEnv)
+		log.Fatalf("%s must be set", geocodeEnv)
 	}
 	return key
 }
