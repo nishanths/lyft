@@ -25,7 +25,6 @@ const help = `usage: lyft [flags] <ride|route>
 Ride subcommand:
 The ride subcommand can create, cancel, update, or track the status of rides. 
 
-
   lyft ride create
   lyft ride cancel <ride-id>
   lyft ride status <ride-id>
@@ -73,7 +72,6 @@ func usage() {
 
 const (
 	rootDir      = ".lyft"
-	configFile   = "config.json"
 	internalFile = "internal.json"
 	routesFile   = "routes.json"
 )

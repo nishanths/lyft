@@ -9,8 +9,9 @@ This program can help you order Line rides from your computer.
 
 ### Example
 
-Create a ride using `lyft ride create`. You can watch updates to the ride using 
-the `-w` flag and include desktop notifications using `-t`.
+Create a ride using `lyft ride create`. 
+
+See `lyft -help` for more commands.
 
 <img src="https://i.imgur.com/uT0d4ln.gif" width=480>
 
@@ -23,7 +24,7 @@ export GOOG_GEOCODE_KEY=<key>
 export LYFT_CLIENT_ID=<key>
 export LYFT_CLIENT_SECRET=<key>
 ```
-3. Begin requesting rides! See the example above or run `lyft -help` from Terminal.
+3. Begin requesting rides! See the example above.
    The first time you request a ride, you will need to authorize the program
    to order rides on your behalf. Follow the instructions printed on the 
    command line. You will only need to do this the first time.
