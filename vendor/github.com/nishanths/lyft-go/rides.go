@@ -23,10 +23,20 @@ const (
 
 // RideTypeDisplay returns a nice display string for the supplied ride type.
 func RideTypeDisplay(r string) string {
-	// TODO: This feels hacky. Maybe it should be a hardcoded switch-case,
-	// or it shouldn't exist in the package at all.
-	r = strings.Replace(r, "_", " ", -1)
-	r = strings.Title(r)
+	switch r {
+	case RideTypeLyft:
+		return "Lyft"
+	case RideTypePlus:
+		return "Lyft Plus"
+	case RideTypeLine:
+		return "Lyft Line"
+	case RideTypePremier:
+		return "Lyft Premier"
+	case RideTypeLux:
+		return "Lyft Lux"
+	case RideTypeLuxSUV:
+		return "Lyft Lux SUV"
+	}
 	return r
 }
 

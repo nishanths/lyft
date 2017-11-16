@@ -314,7 +314,7 @@ type UserProfile struct {
 }
 
 // UserProfile returns the authenticated user's profile info.
-func (c *Client) UserProfile(id string) (UserProfile, http.Header, error) {
+func (c *Client) UserProfile() (UserProfile, http.Header, error) {
 	r, err := http.NewRequest("GET", c.base()+"/v1/profile", nil)
 	if err != nil {
 		return UserProfile{}, nil, err

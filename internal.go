@@ -12,9 +12,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"go.avalanche.space/lyft-go"
-	"go.avalanche.space/lyft-go/auth"
-	"go.avalanche.space/lyft-go/auth/threeleg"
+	"github.com/nishanths/lyft-go"
+	"github.com/nishanths/lyft-go/auth"
+	"github.com/nishanths/lyft-go/auth/threeleg"
 )
 
 type Config struct {

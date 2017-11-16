@@ -1,4 +1,4 @@
-package lyft // import "go.avalanche.space/lyft-go"
+package lyft
 
 import (
 	"bytes"
@@ -210,7 +210,7 @@ func RateRemaining(h http.Header) (n int, ok bool) {
 	return intHeaderValue(h, "X-Ratelimit-Remaining")
 }
 
-// RateRemaining returns the value of X-Ratelimit-Limit.
+// RateLimit returns the value of X-Ratelimit-Limit.
 func RateLimit(h http.Header) (n int, ok bool) {
 	return intHeaderValue(h, "X-Ratelimit-Limit")
 }

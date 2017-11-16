@@ -6,14 +6,14 @@ No API guarantees yet, so please vendor. Particularly don't depend on
 the JSON encoding/decoding of types.
 
 ```
-go get go.avalanche.space/lyft-go/...
+go get github.com/nishanths/lyft-go/...
 ```
 
 ### Docs
 
-[![GoDoc](https://godoc.org/go.avalanche.space/lyft-go?status.svg)](https://godoc.org/go.avalanche.space/lyft-go)
+[![GoDoc](https://godoc.org/github.com/nishanths/lyft-go?status.svg)](https://godoc.org/github.com/nishanths/lyft-go)
 
-See the [Usage](https://godoc.org/go.avalanche.space/lyft-go#hdr-Usage) section 
+See the [Usage](https://godoc.org/github.com/nishanths/lyft-go#hdr-Usage) section
 for a usage example.
 
 ### License

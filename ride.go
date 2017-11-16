@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"go.avalanche.space/lyft-go"
+	"github.com/nishanths/lyft-go"
 )
 
 func cmdRide(args []string, flags Flags) {

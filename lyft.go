@@ -1,5 +1,5 @@
 // Command lyft can request and manage Lyft rides from the command line.
-package main // import "go.avalanche.space/lyft"
+package main
 
 import (
 	"bufio"
@@ -14,7 +14,7 @@ import (
 	"strings"
 	"text/tabwriter"
 
-	"go.avalanche.space/lyft-go"
+	"github.com/nishanths/lyft-go"
 	"googlemaps.github.io/maps"
 )
 

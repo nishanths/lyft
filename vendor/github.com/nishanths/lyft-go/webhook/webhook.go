@@ -1,6 +1,6 @@
 // Package webhook provides types and utility functions for handling
 // Lyft webhooks.
-package webhook // import "go.avalanche.space/lyft-go/webhook"
+package webhook
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"go.avalanche.space/lyft-go"
+	"github.com/nishanths/lyft-go"
 )
 
 // Event types.
@@ -107,7 +107,7 @@ func Verify(requestBody, signature, verificationToken []byte) (bool, error) {
 // verified to have been originating from Lyft.
 var ErrVerify = errors.New("failed to verify request")
 
-// DecodeEvents decodes an incoming webhook request's body and header
+// DecodeEvent decodes an incoming webhook request's body and header
 // into an Event. DecodeEvent will verify that the request was received from
 // Lyft. The error will be ErrVerify if verification fails.
 // The request body will always be drained and closed, even if an error is returned.

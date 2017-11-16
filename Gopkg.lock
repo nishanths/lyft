@@ -3,9 +3,9 @@
 
 [[projects]]
   branch = "master"
-  name = "go.avalanche.space/lyft-go"
+  name = "github.com/nishanths/lyft-go"
   packages = [".","auth","auth/threeleg"]
-  revision = "a90691fce3afac75ecdeb13a3113eb0f33ab109a"
+  revision = "80ca8e644815c58d705f86eca1b5f92439911956"
 
 [[projects]]
   branch = "master"
@@ -22,6 +22,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "7070e8c77e561180754e98f4545be505b3f44a61a10f0b06d206cbf25886abda"
+  inputs-digest = "90fe2260c1546b9b36cfa29759dc5564ad25b23dc1e9aa9926c8048c4ad7ef69"
   solver-name = "gps-cdcl"
   solver-version = 1

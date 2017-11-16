@@ -2,7 +2,7 @@
 
 Request Lyft rides from the command line.
 
-Install: `go get -u go.avalanche.space/lyft`
+Install: `go get -u github.com/nishanths/lyft`
 
 Lyft Line isn't available on Lyft's web application as of October 2017. 
 This program can help you order Line rides from your computer.
@@ -18,7 +18,7 @@ status of rides, and saving predefined routes to use for rides.
 
 ### Setup
 
-1. Install the program using `go get -u go.avalanche.space/lyft`.
+1. Install the program using `go get -u github.com/nishanths/lyft`.
 2. Set up a Google Maps Geocode API key, a Lyft client ID, and a Lyft client secret:
 ```
 export GOOG_GEOCODE_KEY=<key>

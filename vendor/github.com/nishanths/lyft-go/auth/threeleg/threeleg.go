@@ -1,6 +1,6 @@
 // Package threeleg provides functions for working with the three-legged
 // OAuth flow described at https://developer.lyft.com/v1/docs/authentication#section-3-legged-flow-for-accessing-user-specific-endpoints.
-package threeleg // import "go.avalanche.space/lyft-go/auth/threeleg"
+package threeleg
 
 import (
 	"encoding/json"
@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	"go.avalanche.space/lyft-go"
+	"github.com/nishanths/lyft-go"
 )
 
 // AuthorizationURL constructs the URL that a user should be directed to, in order for the user
