@@ -31,22 +31,22 @@ The ride subcommand can create, cancel, or track the status of rides.
 
 Route subcommand:
 The route subcommand lets you save routes for future use, so you don't have
-to enter full locations each time you create a ride. If name isn't specified, 
+to enter full locations each time you create a ride. If name isn't specified,
 the show prints all saved routes.
 
   lyft route add    <name>
-  lyft route remove <name>
+  lyft route remove <name>...
   lyft route show   [name]
 
 Location input:
-When prompted to enter a location, the input can be in either of these 
+When prompted to enter a location, the input can be in either of these
 two formats: (1) a latitude/longitude pair in the format "lat,lng"; or
 (2) a street address.
 
 Setup:
-The program expects the following environment variables. GOOG_GEOCODE_KEY 
-is used as the Google Maps Geocode API key for gecoding street addresses to 
-latitudes/longitudes. It isn't required if you are not running commands that 
+The program expects the following environment variables. GOOG_GEOCODE_KEY
+is used as the Google Maps Geocode API key for gecoding street addresses to
+latitudes/longitudes. It isn't required if you are not running commands that
 perform geocoding. See README.md for instructions on obtaining these keys.
 
   export GOOG_GEOCODE_KEY=<key>
@@ -61,7 +61,7 @@ Flags:
   -t         Show desktop notifications for significant status updates (default false).
              Implies -w; supported on macOS only. If you use the Lyft app on your phone,
              you will still receive notifications on your phone as you usually would.
-  -w         Continuously watch ride status (default false). Applicable only 
+  -w         Continuously watch ride status (default false). Applicable only
              for 'route add' and 'route status'.
 `
 
