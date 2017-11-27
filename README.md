@@ -1,4 +1,4 @@
-## lyft
+## lyft [![Build Status](https://travis-ci.org/nishanths/lyft.svg?branch=master)](https://travis-ci.org/nishanths/lyft)
 
 Request Lyft rides from the command line.
 
