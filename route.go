@@ -124,7 +124,6 @@ func cmdRouteRemove(args []string, home string) {
 	if len(args) == 0 {
 		log.Fatalf("must specify a <name> for the route to remove")
 	}
-	names := args[0:]
 
 	b, err := ioutil.ReadFile(filepath.Join(home, rootDir, routesFile))
 	if err != nil {
@@ -139,14 +138,13 @@ func cmdRouteRemove(args []string, home string) {
 		log.Fatalf("unmarshaling routes: %s", err)
 	}
 
-	for _, name := range names {
+	for _, name := range args {
 		_, ok := existing[name]
 		if !ok {
 			log.Fatalf("route %q not found; not making any changes.", name)
 		}
 
 		delete(existing, name)
-		log.Printf("removed route %q", name)
 	}
 
 	if err := writeRoutes(existing); err != nil {
