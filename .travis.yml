@@ -7,5 +7,4 @@ matrix:
   allow_failures:
     - go: master
 notifications:
-  email:
-    on_failure: change
+  email: false
