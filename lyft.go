@@ -32,7 +32,7 @@ The ride subcommand can create, cancel, or track the status of rides.
 Route subcommand:
 The route subcommand lets you save routes for future use, so you don't have
 to enter full locations each time you create a ride. If name isn't specified,
-the show prints all saved routes.
+show prints all saved routes.
 
   lyft route add    <name>
   lyft route remove <name>...
