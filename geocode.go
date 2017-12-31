@@ -15,7 +15,7 @@ const geocodeEnv = "GOOG_GEOCODE_KEY"
 func geocodeKey() string {
 	key := os.Getenv(geocodeEnv)
 	if key == "" {
-		log.Fatalf("%s must be set", geocodeEnv)
+		log.Fatalf("%s must be set; see https://godoc.org/github.com/nishanths/lyft#hdr-Setup", geocodeEnv)
 	}
 	return key
 }

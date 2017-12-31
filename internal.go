@@ -37,11 +37,11 @@ func (i Internal) matches(c Config) bool {
 func readConfig() (c Config, err error) {
 	i := os.Getenv("LYFT_CLIENT_ID")
 	if i == "" {
-		return Config{}, errors.New("LYFT_CLIENT_ID must be set")
+		return Config{}, errors.New("LYFT_CLIENT_ID must be set; see https://godoc.org/github.com/nishanths/lyft#hdr-Setup")
 	}
 	s := os.Getenv("LYFT_CLIENT_SECRET")
 	if s == "" {
-		return Config{}, errors.New("LYFT_CLIENT_SECRET must be set")
+		return Config{}, errors.New("LYFT_CLIENT_SECRET must be set; see https://godoc.org/github.com/nishanths/lyft#hdr-Setup")
 	}
 	return Config{
 		ClientID:     i,

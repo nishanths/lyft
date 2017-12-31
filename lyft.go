@@ -34,11 +34,10 @@ Flags
 
 The command's optional flags are
 
-  -c <type>   Ride type to order: line, lyft, premier, lux, or luxsuv (default line).
+  -c <type>   Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -n          Dry-run; don't actually create or modify rides (default false).
   -r <route>  Use the named route for the ride.
-  -t          Show desktop notifications for significant status updates (default
-              false). Implies -w; supported on macOS only.
+  -t          Show desktop notifications (default false); macOS only.
   -w          Watch ride status updates (default false).
 
 Ride subcommand
@@ -99,14 +98,14 @@ import (
 
 // TODO: implement ride update <ride-id>
 
-const help = `usage: lyft [flags] <ride|route>
+const help = `Usage: lyft [flags] <ride|route>
 
 Flags
-  -c <type>   Ride type to order: line, lyft, premier, lux, or luxsuv (default line).
+
+  -c <type>   Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -n          Dry-run; don't actually create or modify rides (default false).
   -r <route>  Use the named route for the ride.
-  -t          Show desktop notifications for significant status updates (default
-              false). Implies -w; supported on macOS only.
+  -t          Show desktop notifications (default false); macOS only.
   -w          Watch ride status updates (default false).
 
 The ride subcommand can create, cancel, and track the status of rides.
@@ -122,6 +121,12 @@ show prints all saved routes.
   lyft route add    <name>
   lyft route remove <name>...
   lyft route show   [name]
+
+The program uses the following environment variables.
+
+  export GOOG_GEOCODE_KEY=<key>
+  export LYFT_CLIENT_ID=<key>
+  export LYFT_CLIENT_SECRET=<key>
 
 See https://godoc.org/github.com/nishanths/lyft for more details.
 `
