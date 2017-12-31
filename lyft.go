@@ -1,4 +1,79 @@
-// Command lyft can request and manage Lyft rides from the command line.
+/*
+Command lyft can request and manage Lyft rides from the command line.
+
+Usage
+
+The command's syntax is
+
+  lyft [flags] <ride|route>
+
+Setup
+
+The program uses the following environment variables.
+
+  export GOOG_GEOCODE_KEY=<key>
+  export LYFT_CLIENT_ID=<key>
+  export LYFT_CLIENT_SECRET=<key>
+
+GOOG_GEOCODE_KEY is the Google Maps Geocode API key used to geocode street
+addresses. It isn't required if you are not running commands that perform
+geocoding.
+
+A Google Maps Geocode API key can be obtained from
+
+  https://developers.google.com/maps/documentation/geocoding/get-api-key
+
+Lyft API keys can be obtained by following these steps
+
+  1. Sign in at https://www.lyft.com/developers/apps/new.
+  2. Create a new app. Enter any values for the app name and description.
+  3. Enter any unused local URL (e.g. http://localhost:90) for the Redirect URL.
+
+Flags
+
+The command's optional flags are
+
+  -c <type>   Ride type to order: line, lyft, premier, lux, or luxsuv (default line).
+  -n          Dry-run; don't actually create or modify rides (default false).
+  -r <route>  Use the named route for the ride.
+  -t          Show desktop notifications for significant status updates (default
+              false). Implies -w; supported on macOS only.
+  -w          Watch ride status updates (default false).
+
+Ride subcommand
+
+The ride subcommand can create, cancel, and track the status of rides.
+
+  lyft ride create
+  lyft ride cancel <ride-id>
+  lyft ride status <ride-id>
+
+Route subcommand
+
+The route subcommand can save routes for future use, so you don't have
+to enter full locations each time you create a ride. If name isn't specified,
+show prints all saved routes.
+
+  lyft route add    <name>
+  lyft route remove <name>...
+  lyft route show   [name]
+
+Location input
+
+When prompted to enter a location, the input can be in either of these two
+formats
+
+  1. Latitude/longitude pair in the format "lat,lng"
+  2. Street address.
+
+Notes
+
+Only one passenger is supported for line rides requested by the program.
+
+You will receive notifications via your smartphone's Lyft app as you usual
+for rides created by this program, so you can skip the -t and -w flags if
+you wish.
+*/
 package main
 
 import (
@@ -22,15 +97,21 @@ import (
 
 const help = `usage: lyft [flags] <ride|route>
 
-Ride subcommand:
-The ride subcommand can create, cancel, or track the status of rides.
+Flags
+  -c <type>   Ride type to order: line, lyft, premier, lux, or luxsuv (default line).
+  -n          Dry-run; don't actually create or modify rides (default false).
+  -r <route>  Use the named route for the ride.
+  -t          Show desktop notifications for significant status updates (default
+              false). Implies -w; supported on macOS only.
+  -w          Watch ride status updates (default false).
+
+The ride subcommand can create, cancel, and track the status of rides.
 
   lyft ride create
   lyft ride cancel <ride-id>
   lyft ride status <ride-id>
 
-Route subcommand:
-The route subcommand lets you save routes for future use, so you don't have
+The route subcommand can save routes for future use, so you don't have
 to enter full locations each time you create a ride. If name isn't specified,
 show prints all saved routes.
 
@@ -38,31 +119,7 @@ show prints all saved routes.
   lyft route remove <name>...
   lyft route show   [name]
 
-Location input:
-When prompted to enter a location, the input can be in either of these
-two formats: (1) a latitude/longitude pair in the format "lat,lng"; or
-(2) a street address.
-
-Setup:
-The program expects the following environment variables. GOOG_GEOCODE_KEY
-is used as the Google Maps Geocode API key for gecoding street addresses to
-latitudes/longitudes. It isn't required if you are not running commands that
-perform geocoding. See README.md for instructions on obtaining these keys.
-
-  export GOOG_GEOCODE_KEY=<key>
-  export LYFT_CLIENT_ID=<key>
-  export LYFT_CLIENT_SECRET=<key>
-
-Flags:
-  -c type    Ride type to order; one of: line, lyft, premier, lux, luxsuv (default line).
-             Only 1 passenger is allowed for line rides requested by the program.
-  -n         Dry-run; don't actually create or modify rides (default false).
-  -r route   Use the named route for the ride.
-  -t         Show desktop notifications for significant status updates (default false).
-             Implies -w; supported on macOS only. If you use the Lyft app on your phone,
-             you will still receive notifications on your phone as you usually would.
-  -w         Continuously watch ride status (default false). Applicable only
-             for 'route add' and 'route status'.
+See https://godoc.org/github.com/nishanths/lyft for more details.
 `
 
 func usage() {
