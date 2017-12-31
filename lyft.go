@@ -16,10 +16,7 @@ The program uses the following environment variables.
   export LYFT_CLIENT_SECRET=<key>
 
 GOOG_GEOCODE_KEY is the Google Maps Geocode API key used to geocode street
-addresses. It isn't required if you are not running commands that perform
-geocoding.
-
-A Google Maps Geocode API key can be obtained from
+addresses. It can be obtained from
 
   https://developers.google.com/maps/documentation/geocoding/get-api-key
 
@@ -28,6 +25,10 @@ Lyft API keys can be obtained by following these steps
   1. Sign in at https://www.lyft.com/developers/apps/new.
   2. Create a new app. Enter any values for the app name and description.
   3. Enter any unused local URL (e.g. http://localhost:90) for the Redirect URL.
+
+(The first time you request a ride, the program will request authorization
+to create rides on your behalf. Follow the instructions printed on screen.
+You will only have to do this step once.)
 
 Flags
 
@@ -64,7 +65,7 @@ When prompted to enter a location, the input can be in either of these two
 formats
 
   1. Latitude/longitude pair in the format "lat,lng"
-  2. Street address.
+  2. Street address
 
 Notes
 

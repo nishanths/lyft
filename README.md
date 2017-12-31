@@ -6,15 +6,18 @@ Create and manage Lyft rides from the command line.
 # Install
 go get -u github.com/nishanths/lyft
 
+# Follow setup steps described below
+# ...
+
 # Create rides
 lyft ride create
 lyft ride cancel <ride-id>
 lyft ride status <ride-id>
 
 # Save routes for future use
-lyft route add <name>
+lyft route add    <name>
 lyft route remove <name>...
-lyft route show [name]
+lyft route show   [name]
 
 # Help documentation
 lyft -help
@@ -37,6 +40,10 @@ export LYFT_CLIENT_SECRET=<key>
 
 See the [Setup](https://godoc.org/github.com/nishanths/lyft#hdr-Setup)
 section in godoc to set them up.
+
+(The first time you request a ride, the program will request authorization
+to create rides on your behalf. Follow the instructions printed on screen.
+You will only have to do this step once.)
 
 ## Example
 
