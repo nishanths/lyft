@@ -73,6 +73,9 @@ Only one passenger is supported for line rides requested by the program.
 You will receive notifications via your smartphone's Lyft app as you usual
 for rides created by this program, so you can skip the -t and -w flags if
 you wish.
+
+The program stores its data in a directory named .lyft in the user's home
+directory.
 */
 package main
 

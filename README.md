@@ -1,6 +1,6 @@
 ## lyft [![Build Status](https://travis-ci.org/nishanths/lyft.svg?branch=master)](https://travis-ci.org/nishanths/lyft)
 
-Request and manage Lyft rides from the command line.
+Create and manage Lyft rides from the command line.
 
 ```sh
 # Install
@@ -23,7 +23,7 @@ lyft -help
 Lyft Line isn't available on Lyft's web application (October 2017),
 but this program can help you order Line rides from your computer.
 
-## Docs
+## Setup
 
 [![GoDoc](https://godoc.org/github.com/nishanths/lyft?status.svg)](https://godoc.org/github.com/nishanths/lyft)
 
@@ -36,7 +36,7 @@ export LYFT_CLIENT_SECRET=<key>
 ```
 
 See the [Setup](https://godoc.org/github.com/nishanths/lyft#hdr-Setup)
-section in godoc to get started.
+section in godoc to set them up.
 
 ## Example
 
