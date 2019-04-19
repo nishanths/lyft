@@ -6,7 +6,8 @@ Create and manage Lyft rides from the command line.
 # Install
 go get -u github.com/nishanths/lyft
 
-# Follow setup steps described below
+# ...
+# Follow the setup instructions in the 'Setup' section below
 # ...
 
 # Create rides
