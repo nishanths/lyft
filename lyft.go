@@ -28,7 +28,7 @@ Place subcommand
 
 The place subcommand can save ride start and end locations for future use,
 so you don't have to enter full addresses each time you create a ride. If
-a name isn't specified, the show subcommand prints all saved locations.
+a name isn't specified, the show subcommand prints all saved places.
 
   lyft place add    <name>
   lyft place remove <name>...
