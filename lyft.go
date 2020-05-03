@@ -1,7 +1,9 @@
 /*
 Command lyft can request and manage Lyft rides from the command line.
 
-usage: lyft [flags] <ride|place> [args]
+Usage
+
+  lyft [flags] <ride|place> [args]
 
 Flags
 
