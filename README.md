@@ -14,15 +14,15 @@ export GOOG_GEOCODE_KEY=<key>
 export LYFT_CLIENT_ID=<key>
 export LYFT_CLIENT_SECRET=<key>
 
-# Create rides
+# Manage rides
 lyft ride create
 lyft ride cancel <ride-id>
 lyft ride status <ride-id>
 
 # Save places for future use when creating rides
-lyft plac add    <name>
-lyft plac remove <name>...
-lyft plac show   [name]
+lyft place add    <name>
+lyft place remove <name>...
+lyft place show   [name]
 
 # Help
 lyft -help # or https://godoc.org/github.com/nishanths/lyft
