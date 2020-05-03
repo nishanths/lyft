@@ -18,23 +18,31 @@
 package maps
 
 import (
+	"context"
 	"errors"
 	"net/url"
 	"strings"
-
-	"golang.org/x/net/context"
 )
 
 var snapToRoadsAPI = &apiConfig{
-	host:            "https://roads.googleapis.com",
-	path:            "/v1/snapToRoads",
-	acceptsClientID: false,
+	host:             "https://roads.googleapis.com",
+	path:             "/v1/snapToRoads",
+	acceptsClientID:  false,
+	acceptsSignature: false,
+}
+
+var nearestRoadsAPI = &apiConfig{
+	host:             "https://roads.googleapis.com",
+	path:             "/v1/nearestRoads",
+	acceptsClientID:  false,
+	acceptsSignature: false,
 }
 
 var speedLimitsAPI = &apiConfig{
-	host:            "https://roads.googleapis.com",
-	path:            "/v1/speedLimits",
-	acceptsClientID: false,
+	host:             "https://roads.googleapis.com",
+	path:             "/v1/speedLimits",
+	acceptsClientID:  false,
+	acceptsSignature: false,
 }
 
 // SnapToRoad makes a Snap to Road API request
@@ -73,7 +81,8 @@ type SnapToRoadRequest struct {
 	// Path is the path to be snapped.
 	Path []LatLng
 
-	// Interpolate is whether to interpolate a path to include all points forming the full road-geometry.
+	// Interpolate is whether to interpolate a path to include all points forming the
+	// full road-geometry.
 	Interpolate bool
 }
 
@@ -87,11 +96,51 @@ type SnappedPoint struct {
 	// Location of the snapped point.
 	Location LatLng `json:"location"`
 
-	// OriginalIndex is an integer that indicates the corresponding value in the original request. Not present on interpolated points.
+	// OriginalIndex is an integer that indicates the corresponding value in the
+	// original request. Not present on interpolated points.
 	OriginalIndex *int `json:"originalIndex"`
 
 	// PlaceID is a unique identifier for a place.
 	PlaceID string `json:"placeId"`
+}
+
+// NearestRoads makes a Nearest Roads API request
+func (c *Client) NearestRoads(ctx context.Context, r *NearestRoadsRequest) (*NearestRoadsResponse, error) {
+
+	if len(r.Points) == 0 {
+		return nil, errors.New("maps: Points empty")
+	}
+
+	response := &NearestRoadsResponse{}
+
+	if err := c.getJSON(ctx, nearestRoadsAPI, r, response); err != nil {
+		return nil, err
+	}
+
+	return response, nil
+}
+
+func (r *NearestRoadsRequest) params() url.Values {
+	q := make(url.Values)
+	var p []string
+	for _, e := range r.Points {
+		p = append(p, e.String())
+	}
+
+	q.Set("points", strings.Join(p, "|"))
+
+	return q
+}
+
+// NearestRoadsRequest is the request structure for the Nearest Roads API.
+type NearestRoadsRequest struct {
+	// Points is the list of points to be snapped.
+	Points []LatLng
+}
+
+// NearestRoadsResponse is an array of snapped points.
+type NearestRoadsResponse struct {
+	SnappedPoints []SnappedPoint `json:"snappedPoints"`
 }
 
 // SpeedLimits makes a Speed Limits API request
@@ -148,7 +197,8 @@ type SpeedLimitsRequest struct {
 	// PlaceID is the PlaceIDs to request speed limits for.
 	PlaceID []string
 
-	// Units is whether to return speed limits in `SpeedLimitKPH` or `SpeedLimitMPH`. Optional, default behavior is to return results in KPH.
+	// Units is whether to return speed limits in `SpeedLimitKPH` or `SpeedLimitMPH`.
+	// Optional, default behavior is to return results in KPH.
 	Units speedLimitUnit
 }
 

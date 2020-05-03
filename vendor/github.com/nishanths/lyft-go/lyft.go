@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -18,17 +19,36 @@ const BaseURL = "https://api.lyft.com"
 
 const TimeLayout = time.RFC3339
 
-// Client is a client for the Lyft API.
-// AccessToken must be set for a client to be ready to use. The rest of the
-// fields are optional. Methods are goroutine safe, unless the
-// client's fields are being modified at the same time.
+// Client is a client for the Lyft API. Use NewClient to create a client.
+// Methods on a client are goroutine safe, unless the client's fields are being
+// modified directly by other goroutines.
 type Client struct {
-	AccessToken string
 	// The following fields are optional.
 	HTTPClient *http.Client // Uses http.DefaultClient if nil.
-	Header     http.Header  // Extra request header to add.
+	Header     http.Header  // Extra request headers to add.
 	BaseURL    string       // The base URL of the API; uses the package-level BaseURL if empty. Useful in tests.
-	debug      bool         // Dump requests/responses using package log's default logger.
+
+	mu          sync.Mutex // protects accessToken
+	accessToken string
+
+	// Internal.
+	debug bool // Dump requests/responses using package log's default logger.
+}
+
+func NewClient(accessToken string) *Client {
+	return &Client{accessToken: accessToken}
+}
+
+func (c *Client) AccessToken() string {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	return c.accessToken
+}
+
+func (c *Client) SetAccessToken(a string) {
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	c.accessToken = a
 }
 
 func (c *Client) base() string {
@@ -86,7 +106,7 @@ func (c *Client) addHeader(h http.Header) {
 // in the Authorization field, as expected by the Lyft API. Useful when
 // constructing a request manually.
 func (c *Client) authorize(h http.Header) {
-	h.Add("Authorization", "Bearer "+c.AccessToken)
+	h.Add("Authorization", "Bearer "+c.AccessToken())
 }
 
 // Possible values for the Reason field in StatusError.

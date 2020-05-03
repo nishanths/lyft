@@ -12,23 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-// More information about Google Distance Matrix API is available on
-// https://developers.google.com/maps/documentation/distancematrix/
+// More information about Google Geocoding API is available on
+// https://developers.google.com/maps/documentation/geocoding
 
 package maps
 
 import (
+	"context"
 	"errors"
 	"net/url"
 	"strings"
-
-	"golang.org/x/net/context"
 )
 
 var geocodingAPI = &apiConfig{
-	host:            "https://maps.googleapis.com",
-	path:            "/maps/api/geocode/json",
-	acceptsClientID: true,
+	host:             "https://maps.googleapis.com",
+	path:             "/maps/api/geocode/json",
+	acceptsClientID:  true,
+	acceptsSignature: false,
 }
 
 // Geocode makes a Geocoding API request
@@ -44,10 +44,6 @@ func (c *Client) Geocode(ctx context.Context, r *GeocodingRequest) ([]GeocodingR
 
 	if err := c.getJSON(ctx, geocodingAPI, r, &response); err != nil {
 		return nil, err
-	}
-
-	if response.Status == "ZERO_RESULTS" {
-		return []GeocodingResult{}, nil
 	}
 
 	if err := response.StatusError(); err != nil {
@@ -131,13 +127,17 @@ func (r *GeocodingRequest) params() url.Values {
 type GeocodeAccuracy string
 
 const (
-	// GeocodeAccuracyRooftop restricts the results to addresses for which Google has location information accurate down to street address precision
+	// GeocodeAccuracyRooftop restricts the results to addresses for which Google has
+	// location information accurate down to street address precision.
 	GeocodeAccuracyRooftop = GeocodeAccuracy("ROOFTOP")
-	// GeocodeAccuracyRangeInterpolated restricts the results to those that reflect an approximation interpolated between two precise points.
+	// GeocodeAccuracyRangeInterpolated restricts the results to those that reflect an
+	// approximation interpolated between two precise points.
 	GeocodeAccuracyRangeInterpolated = GeocodeAccuracy("RANGE_INTERPOLATED")
-	// GeocodeAccuracyGeometricCenter restricts the results to geometric centers of a location such as a polyline or polygon.
+	// GeocodeAccuracyGeometricCenter restricts the results to geometric centers of a
+	// location such as a polyline or polygon.
 	GeocodeAccuracyGeometricCenter = GeocodeAccuracy("GEOMETRIC_CENTER")
-	// GeocodeAccuracyApproximate restricts the results to those that are characterized as approximate.
+	// GeocodeAccuracyApproximate restricts the results to those that are characterized
+	// as approximate.
 	GeocodeAccuracyApproximate = GeocodeAccuracy("APPROXIMATE")
 )
 
@@ -145,33 +145,39 @@ const (
 type GeocodingRequest struct {
 	// Geocoding fields
 
-	// Address is the street address that you want to geocode, in the format used by the national postal service of the country concerned.
+	// Address is the street address that you want to geocode, in the format used by
+	// the national postal service of the country concerned.
 	Address string
-	// Components is a component filter for which you wish to obtain a geocode. Either Address or Components is required in a geocoding request.
-	// For more detail on Component Filtering please see
+	// Components is a component filter for which you wish to obtain a geocode. Either
+	// Address or Components is required in a geocoding request. For more detail on
+	// Component Filtering please see
 	// https://developers.google.com/maps/documentation/geocoding/intro#ComponentFiltering
 	Components map[Component]string
-	// Bounds is the bounding box of the viewport within which to bias geocode results more prominently. Optional.
+	// Bounds is the bounding box of the viewport within which to bias geocode results
+	// more prominently. Optional.
 	Bounds *LatLngBounds
 	// Region is the region code, specified as a ccTLD two-character value. Optional.
 	Region string
 
 	// Reverse geocoding fields
 
-	// LatLng is the textual latitude/longitude value for which you wish to obtain the closest, human-readable address. Either LatLng or PlaceID is required for Reverse Geocoding.
+	// LatLng is the textual latitude/longitude value for which you wish to obtain the
+	// closest, human-readable address. Either LatLng or PlaceID is required for
+	// Reverse Geocoding.
 	LatLng *LatLng
 	// ResultType is an array of one or more address types. Optional.
 	ResultType []string
 	// LocationType is an array of one or more geocoding accuracy types. Optional.
 	LocationType []GeocodeAccuracy
-	// PlaceID is a string which contains the place_id, which can be used for reverse geocoding requests. Either LatLng or PlaceID is required for Reverse Geocoding.
+	// PlaceID is a string which contains the place_id, which can be used for reverse
+	// geocoding requests. Either LatLng or PlaceID is required for Reverse Geocoding.
 	PlaceID string
 
 	// Language is the language in which to return results. Optional.
 	Language string
 
-	// Custom allows passing through custom parameters to the Geocoding back end. Use with caution.
-	// For more detail on why this is required, please see
+	// Custom allows passing through custom parameters to the Geocoding back end.
+	// Use with caution. For more detail on why this is required, please see
 	// https://googlegeodevelopers.blogspot.com/2016/11/address-geocoding-in-google-maps-apis.html
 	Custom url.Values
 }
@@ -183,6 +189,50 @@ type GeocodingResult struct {
 	Geometry          AddressGeometry    `json:"geometry"`
 	Types             []string           `json:"types"`
 	PlaceID           string             `json:"place_id"`
+
+	// PartialMatch indicates that the geocoder did not return an exact match for
+	// the original request, though it was able to match part of the requested address.
+	// You may wish to examine the original request for misspellings and/or an incomplete address.
+	// Partial matches most often occur for street addresses that do not exist within the
+	// locality you pass in the request.
+	// Partial matches may also be returned when a request matches two or more locations in
+	// the same locality. For example, "21 Henr St, Bristol, UK" will return a partial match
+	// for both Henry Street and Henrietta Street.
+	// Note that if a request includes a misspelled address component, the geocoding service may
+	// suggest an alternative address.
+	// Suggestions triggered in this way will also be marked as a partial match.
+	PartialMatch bool `json:"partial_match"`
+
+	// PlusCode (see https://en.wikipedia.org/wiki/Open_Location_Code and https://plus.codes/)
+	// is an encoded location reference, derived from latitude and longitude coordinates,
+	// that represents an area: 1/8000th of a degree by 1/8000th of a degree (about 14m x 14m at the equator)
+	// or smaller.
+	//
+	// Plus codes can be used as a replacement for street addresses in places where they do not exist
+	// (where buildings are not numbered or streets are not named).
+	// The plus code is formatted as a global code and a compound code:
+	// Typically, both the global code and compound code are returned.
+	// However, if the result is in a remote location (for example, an ocean or desert)
+	// only the global code may be returned.
+	PlusCode AddressPlusCode `json:"plus_code"`
+}
+
+// AddressPlusCode (see https://en.wikipedia.org/wiki/Open_Location_Code and https://plus.codes/)
+// is an encoded location reference, derived from latitude and longitude coordinates,
+// that represents an area: 1/8000th of a degree by 1/8000th of a degree (about 14m x 14m at the equator)
+// or smaller.
+//
+// Plus codes can be used as a replacement for street addresses in places where they do not exist
+// (where buildings are not numbered or streets are not named).
+// The plus code is formatted as a global code and a compound code:
+// Typically, both the global code and compound code are returned.
+// However, if the result is in a remote location (for example, an ocean or desert)
+// only the global code may be returned.
+type AddressPlusCode struct {
+	// GlobalCode is a 4 character area code and 6 character or longer local code (849VCWC8+R9).
+	GlobalCode string `json:"global_code"`
+	// CompoundCode is a 6 character or longer local code with an explicit location (CWC8+R9, Mountain View, CA, USA).
+	CompoundCode string `json:"compound_code"`
 }
 
 // AddressComponent is a part of an address

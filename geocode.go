@@ -15,7 +15,7 @@ const geocodeEnv = "GOOG_GEOCODE_KEY"
 func geocodeKey() string {
 	key := os.Getenv(geocodeEnv)
 	if key == "" {
-		log.Fatalf("%s must be set; see https://godoc.org/github.com/nishanths/lyft#hdr-Setup", geocodeEnv)
+		log.Fatalf("%s must be set to geocode addresses; see https://godoc.org/github.com/nishanths/lyft#hdr-Setup", geocodeEnv)
 	}
 	return key
 }
@@ -25,9 +25,9 @@ var (
 	gcInit sync.Once
 )
 
-// geocodeClient returns a Google Maps client ready to make
+// mapsClient returns a Google Maps client ready to make
 // geocode requests. It logs a fatal error if the client cannot be created.
-func geocodeClient() *maps.Client {
+func mapsClient() *maps.Client {
 	gcInit.Do(func() {
 		key := geocodeKey()
 		client, err := maps.NewClient(maps.WithAPIKey(key))

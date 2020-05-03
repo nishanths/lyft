@@ -1,0 +1,13 @@
+# github.com/google/uuid v1.1.1
+github.com/google/uuid
+# github.com/nishanths/lyft-go v0.0.0-20181124045008-e9ebf91faba2
+## explicit
+github.com/nishanths/lyft-go
+github.com/nishanths/lyft-go/auth
+github.com/nishanths/lyft-go/auth/threeleg
+# golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1
+golang.org/x/time/rate
+# googlemaps.github.io/maps v1.1.2
+## explicit
+googlemaps.github.io/maps
+googlemaps.github.io/maps/internal

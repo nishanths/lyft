@@ -40,10 +40,10 @@
 //   }
 //
 //   // Create a client.
-//   client := &lyft.Client{AccessToken: t.AccessToken}
+//   c := lyft.NewClient(t.AccessToken)
 //
 //   // Make requests.
-//   r, header, err := client.RideTypes(37.7, -122.2)
+//   r, header, err := c.RideTypes(37.7, -122.2)
 //   if err != nil {
 //       log.Fatalf("error getting ride types: %s", err)
 //   }

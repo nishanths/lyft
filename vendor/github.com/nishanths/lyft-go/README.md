@@ -1,6 +1,6 @@
 ## lyft-go
 
-Package lyft impelements a Go client for v1 of lyft.com's HTTP API.
+Package lyft implements a Go client for v1 of lyft.com's HTTP API.
 
 No API guarantees yet, so please vendor. Particularly don't depend on
 the JSON encoding/decoding of types.

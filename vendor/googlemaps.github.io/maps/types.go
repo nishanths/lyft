@@ -76,11 +76,13 @@ const (
 
 // Distance is the API representation for a distance between two points.
 type Distance struct {
-	// HumanReadable is the human friendly distance. This is rounded and in an appropriate unit for the
-	// request. The units can be overriden with a request parameter.
+	// HumanReadable is the human friendly distance. This is rounded and in an
+	// appropriate unit for the request. The units can be overriden with a request
+	// parameter.
 	HumanReadable string `json:"text"`
-	// Meters is the numeric distance, always in meters. This is intended to be used only in
-	// algorithmic situations, e.g. sorting results by some user specified metric.
+	// Meters is the numeric distance, always in meters. This is intended to be used
+	// only in algorithmic situations, e.g. sorting results by some user specified
+	// metric.
 	Meters int `json:"value"`
 }
 
@@ -108,17 +110,22 @@ const (
 
 // OpeningHours describes the opening hours for a Place Details result.
 type OpeningHours struct {
-	// OpenNow is a boolean value indicating if the place is open at the current time. Please note, this field will be null if it isn't present in the response.
+	// OpenNow is a boolean value indicating if the place is open at the current time.
+	// Please note, this field will be null if it isn't present in the response.
 	OpenNow *bool `json:"open_now,omitempty"`
-	// Periods is an array of opening periods covering seven days, starting from Sunday, in chronological order.
+	// Periods is an array of opening periods covering seven days, starting from Sunday,
+	// in chronological order.
 	Periods []OpeningHoursPeriod `json:"periods,omitempty"`
-	// weekdayText is an array of seven strings representing the formatted opening hours for each day of the week, for example "Monday: 8:30 am – 5:30 pm".
+	// weekdayText is an array of seven strings representing the formatted opening hours
+	// for each day of the week, for example "Monday: 8:30 am – 5:30 pm".
 	WeekdayText []string `json:"weekday_text,omitempty"`
-	// PermanentlyClosed indicates that the place has permanently shut down. Please note, this field will be null if it isn't present in the response.
+	// PermanentlyClosed indicates that the place has permanently shut down. Please
+	// note, this field will be null if it isn't present in the response.
 	PermanentlyClosed *bool `json:"permanently_closed,omitempty"`
 }
 
-// OpeningHoursPeriod is a single OpeningHours day describing when the place opens and closes.
+// OpeningHoursPeriod is a single OpeningHours day describing when the place opens
+// and closes.
 type OpeningHoursPeriod struct {
 	// Open is when the place opens.
 	Open OpeningHoursOpenClose `json:"open"`
@@ -128,9 +135,11 @@ type OpeningHoursPeriod struct {
 
 // OpeningHoursOpenClose describes when the place is open.
 type OpeningHoursOpenClose struct {
-	// Day is a number from 0–6, corresponding to the days of the week, starting on Sunday. For example, 2 means Tuesday.
+	// Day is a number from 0–6, corresponding to the days of the week, starting on
+	// Sunday. For example, 2 means Tuesday.
 	Day time.Weekday `json:"day"`
-	// Time contains a time of day in 24-hour hhmm format. Values are in the range 0000–2359. The time will be reported in the place’s time zone.
+	// Time contains a time of day in 24-hour hhmm format. Values are in the range
+	// 0000–2359. The time will be reported in the place’s time zone.
 	Time string `json:"time"`
 }
 
@@ -146,8 +155,9 @@ type Photo struct {
 	HTMLAttributions []string `json:"html_attributions"`
 }
 
-// Component specifies a key for the parts of a structured address.
-// See https://developers.google.com/maps/documentation/geocoding/intro#ComponentFiltering for more detail.
+// Component specifies a key for the parts of a structured address. See
+// https://developers.google.com/maps/documentation/geocoding/intro#ComponentFiltering
+// for more detail.
 type Component string
 
 const (
@@ -163,21 +173,20 @@ const (
 	ComponentCountry = Component("country")
 )
 
-// RankBy specifies the order in which results are listed
+// RankBy specifies the order in which results are listed.
 type RankBy string
 
-// RankBy options for Places Search
+// RankBy options for Places Search.
 const (
 	RankByProminence = RankBy("prominence")
 	RankByDistance   = RankBy("distance")
 )
 
-// PlaceType restricts Place API search to the results to places matching the specified type.
+// PlaceType restricts Place API search to the results to places matching the
+// specified type.
 type PlaceType string
 
-// Warning: DO NOT EDIT PlaceType* - they are code generated.
-
-// Place Types for the Places API
+// Place Types for the Places API.
 const (
 	PlaceTypeAccounting            = PlaceType("accounting")
 	PlaceTypeAirport               = PlaceType("airport")
@@ -212,20 +221,14 @@ const (
 	PlaceTypeElectrician           = PlaceType("electrician")
 	PlaceTypeElectronicsStore      = PlaceType("electronics_store")
 	PlaceTypeEmbassy               = PlaceType("embassy")
-	PlaceTypeEstablishment         = PlaceType("establishment")
-	PlaceTypeFinance               = PlaceType("finance")
 	PlaceTypeFireStation           = PlaceType("fire_station")
 	PlaceTypeFlorist               = PlaceType("florist")
-	PlaceTypeFood                  = PlaceType("food")
 	PlaceTypeFuneralHome           = PlaceType("funeral_home")
 	PlaceTypeFurnitureStore        = PlaceType("furniture_store")
 	PlaceTypeGasStation            = PlaceType("gas_station")
-	PlaceTypeGeneralContractor     = PlaceType("general_contractor")
-	PlaceTypeGroceryOrSupermarket  = PlaceType("grocery_or_supermarket")
 	PlaceTypeGym                   = PlaceType("gym")
 	PlaceTypeHairCare              = PlaceType("hair_care")
 	PlaceTypeHardwareStore         = PlaceType("hardware_store")
-	PlaceTypeHealth                = PlaceType("health")
 	PlaceTypeHinduTemple           = PlaceType("hindu_temple")
 	PlaceTypeHomeGoodsStore        = PlaceType("home_goods_store")
 	PlaceTypeHospital              = PlaceType("hospital")
@@ -252,7 +255,6 @@ const (
 	PlaceTypePetStore              = PlaceType("pet_store")
 	PlaceTypePharmacy              = PlaceType("pharmacy")
 	PlaceTypePhysiotherapist       = PlaceType("physiotherapist")
-	PlaceTypePlaceOfWorship        = PlaceType("place_of_worship")
 	PlaceTypePlumber               = PlaceType("plumber")
 	PlaceTypePolice                = PlaceType("police")
 	PlaceTypePostOffice            = PlaceType("post_office")
@@ -276,8 +278,6 @@ const (
 	PlaceTypeVeterinaryCare        = PlaceType("veterinary_care")
 	PlaceTypeZoo                   = PlaceType("zoo")
 )
-
-// Warning: DO NOT EDIT ParsePlaceType() - it is generated code.
 
 // ParsePlaceType will parse a string representation of a PlaceType.
 func ParsePlaceType(placeType string) (PlaceType, error) {
@@ -348,34 +348,22 @@ func ParsePlaceType(placeType string) (PlaceType, error) {
 		return PlaceTypeElectronicsStore, nil
 	case "embassy":
 		return PlaceTypeEmbassy, nil
-	case "establishment":
-		return PlaceTypeEstablishment, nil
-	case "finance":
-		return PlaceTypeFinance, nil
 	case "fire_station":
 		return PlaceTypeFireStation, nil
 	case "florist":
 		return PlaceTypeFlorist, nil
-	case "food":
-		return PlaceTypeFood, nil
 	case "funeral_home":
 		return PlaceTypeFuneralHome, nil
 	case "furniture_store":
 		return PlaceTypeFurnitureStore, nil
 	case "gas_station":
 		return PlaceTypeGasStation, nil
-	case "general_contractor":
-		return PlaceTypeGeneralContractor, nil
-	case "grocery_or_supermarket":
-		return PlaceTypeGroceryOrSupermarket, nil
 	case "gym":
 		return PlaceTypeGym, nil
 	case "hair_care":
 		return PlaceTypeHairCare, nil
 	case "hardware_store":
 		return PlaceTypeHardwareStore, nil
-	case "health":
-		return PlaceTypeHealth, nil
 	case "hindu_temple":
 		return PlaceTypeHinduTemple, nil
 	case "home_goods_store":
@@ -428,8 +416,6 @@ func ParsePlaceType(placeType string) (PlaceType, error) {
 		return PlaceTypePharmacy, nil
 	case "physiotherapist":
 		return PlaceTypePhysiotherapist, nil
-	case "place_of_worship":
-		return PlaceTypePlaceOfWorship, nil
 	case "plumber":
 		return PlaceTypePlumber, nil
 	case "police":
@@ -475,11 +461,12 @@ func ParsePlaceType(placeType string) (PlaceType, error) {
 	case "zoo":
 		return PlaceTypeZoo, nil
 	default:
-		return PlaceType("Unknown PlaceType"), fmt.Errorf("Unknown PlaceType \"%v\"", placeType)
+		return PlaceType(""), fmt.Errorf("Unknown PlaceType \"%v\"", placeType)
 	}
 }
 
-// AutocompletePlaceType restricts Place Autocomplete API to the results to places matching the specified type.
+// AutocompletePlaceType restricts Place Autocomplete API to the results to places
+// matching the specified type.
 type AutocompletePlaceType string
 
 // https://developers.google.com/places/web-service/autocomplete#place_types
@@ -491,6 +478,8 @@ const (
 	AutocompletePlaceTypeCities        = AutocompletePlaceType("(cities)")
 )
 
+// ParseAutocompletePlaceType will parse a string representation of a
+// AutocompletePlaceTypes.
 func ParseAutocompletePlaceType(placeType string) (AutocompletePlaceType, error) {
 	switch strings.ToLower(placeType) {
 	case "geocode":
@@ -504,6 +493,246 @@ func ParseAutocompletePlaceType(placeType string) (AutocompletePlaceType, error)
 	case "(cities)":
 		return AutocompletePlaceTypeCities, nil
 	default:
-		return AutocompletePlaceType("Unknown AutocompletePlaceType"), fmt.Errorf("Unknown AutocompletePlaceType \"%v\"", placeType)
+		return AutocompletePlaceType(""), fmt.Errorf("Unknown AutocompletePlaceType \"%v\"", placeType)
 	}
+}
+
+// PlaceDetailsFieldMask allows you to specify which fields are to be returned with
+// a place details request. Please see the following URL for more detail:
+// https://cloud.google.com/maps-platform/user-guide/product-changes/#places
+type PlaceDetailsFieldMask string
+
+// The individual Place Details Field Masks.
+const (
+	PlaceDetailsFieldMaskAddressComponent             = PlaceDetailsFieldMask("address_component")
+	PlaceDetailsFieldMaskADRAddress                   = PlaceDetailsFieldMask("adr_address")
+	PlaceDetailsFieldMaskAltID                        = PlaceDetailsFieldMask("alt_id")
+	PlaceDetailsFieldMaskBusinessStatus               = PlaceDetailsFieldMask("business_status")
+	PlaceDetailsFieldMaskFormattedAddress             = PlaceDetailsFieldMask("formatted_address")
+	PlaceDetailsFieldMaskFormattedPhoneNumber         = PlaceDetailsFieldMask("formatted_phone_number")
+	PlaceDetailsFieldMaskGeometry                     = PlaceDetailsFieldMask("geometry")
+	PlaceDetailsFieldMaskGeometryLocation             = PlaceDetailsFieldMask("geometry/location")
+	PlaceDetailsFieldMaskGeometryLocationLat          = PlaceDetailsFieldMask("geometry/location/lat")
+	PlaceDetailsFieldMaskGeometryLocationLng          = PlaceDetailsFieldMask("geometry/location/lng")
+	PlaceDetailsFieldMaskGeometryViewport             = PlaceDetailsFieldMask("geometry/viewport")
+	PlaceDetailsFieldMaskGeometryViewportNortheast    = PlaceDetailsFieldMask("geometry/viewport/northeast")
+	PlaceDetailsFieldMaskGeometryViewportNortheastLat = PlaceDetailsFieldMask("geometry/viewport/northeast/lat")
+	PlaceDetailsFieldMaskGeometryViewportNortheastLng = PlaceDetailsFieldMask("geometry/viewport/northeast/lng")
+	PlaceDetailsFieldMaskGeometryViewportSouthwest    = PlaceDetailsFieldMask("geometry/viewport/southwest")
+	PlaceDetailsFieldMaskGeometryViewportSouthwestLat = PlaceDetailsFieldMask("geometry/viewport/southwest/lat")
+	PlaceDetailsFieldMaskGeometryViewportSouthwestLng = PlaceDetailsFieldMask("geometry/viewport/southwest/lng")
+	PlaceDetailsFieldMaskIcon                         = PlaceDetailsFieldMask("icon")
+	PlaceDetailsFieldMaskID                           = PlaceDetailsFieldMask("id")
+	PlaceDetailsFieldMaskInternationalPhoneNumber     = PlaceDetailsFieldMask("international_phone_number")
+	PlaceDetailsFieldMaskName                         = PlaceDetailsFieldMask("name")
+	PlaceDetailsFieldMaskOpeningHours                 = PlaceDetailsFieldMask("opening_hours")
+	PlaceDetailsFieldMaskPermanentlyClosed            = PlaceDetailsFieldMask("permanently_closed")
+	PlaceDetailsFieldMaskPhotos                       = PlaceDetailsFieldMask("photos")
+	PlaceDetailsFieldMaskPlaceID                      = PlaceDetailsFieldMask("place_id")
+	PlaceDetailsFieldMaskPriceLevel                   = PlaceDetailsFieldMask("price_level")
+	PlaceDetailsFieldMaskRatings                      = PlaceDetailsFieldMask("rating")
+	PlaceDetailsFieldMaskUserRatingsTotal             = PlaceDetailsFieldMask("user_ratings_total")
+	PlaceDetailsFieldMaskReviews                      = PlaceDetailsFieldMask("reviews")
+	PlaceDetailsFieldMaskScope                        = PlaceDetailsFieldMask("scope")
+	PlaceDetailsFieldMaskTypes                        = PlaceDetailsFieldMask("types")
+	PlaceDetailsFieldMaskURL                          = PlaceDetailsFieldMask("url")
+	PlaceDetailsFieldMaskUTCOffset                    = PlaceDetailsFieldMask("utc_offset")
+	PlaceDetailsFieldMaskVicinity                     = PlaceDetailsFieldMask("vicinity")
+	PlaceDetailsFieldMaskWebsite                      = PlaceDetailsFieldMask("website")
+)
+
+// ParsePlaceDetailsFieldMask will parse a string representation of
+// PlaceDetailsFieldMask.
+func ParsePlaceDetailsFieldMask(placeDetailsFieldMask string) (PlaceDetailsFieldMask, error) {
+	switch strings.ToLower(placeDetailsFieldMask) {
+	case "address_component":
+		return PlaceDetailsFieldMaskAddressComponent, nil
+	case "adr_address":
+		return PlaceDetailsFieldMaskADRAddress, nil
+	case "alt_id":
+		return PlaceDetailsFieldMaskAltID, nil
+	case "business_status":
+		return PlaceDetailsFieldMaskBusinessStatus, nil
+	case "formatted_address":
+		return PlaceDetailsFieldMaskFormattedAddress, nil
+	case "formatted_phone_number":
+		return PlaceDetailsFieldMaskFormattedPhoneNumber, nil
+	case "geometry":
+		return PlaceDetailsFieldMaskGeometry, nil
+	case "geometry/location":
+		return PlaceDetailsFieldMaskGeometryLocation, nil
+	case "geometry/location/lat":
+		return PlaceDetailsFieldMaskGeometryLocationLat, nil
+	case "geometry/location/lng":
+		return PlaceDetailsFieldMaskGeometryLocationLng, nil
+	case "geometry/viewport":
+		return PlaceDetailsFieldMaskGeometryViewport, nil
+	case "geometry/viewport/northeast":
+		return PlaceDetailsFieldMaskGeometryViewportNortheast, nil
+	case "geometry/viewport/northeast/lat":
+		return PlaceDetailsFieldMaskGeometryViewportNortheastLat, nil
+	case "geometry/viewport/northeast/lng":
+		return PlaceDetailsFieldMaskGeometryViewportNortheastLng, nil
+	case "geometry/viewport/southwest":
+		return PlaceDetailsFieldMaskGeometryViewportSouthwest, nil
+	case "geometry/viewport/southwest/lat":
+		return PlaceDetailsFieldMaskGeometryViewportSouthwestLat, nil
+	case "geometry/viewport/southwest/lng":
+		return PlaceDetailsFieldMaskGeometryViewportSouthwestLng, nil
+	case "icon":
+		return PlaceDetailsFieldMaskIcon, nil
+	case "id":
+		return PlaceDetailsFieldMaskID, nil
+	case "international_phone_number":
+		return PlaceDetailsFieldMaskInternationalPhoneNumber, nil
+	case "name":
+		return PlaceDetailsFieldMaskName, nil
+	case "opening_hours":
+		return PlaceDetailsFieldMaskOpeningHours, nil
+	case "permanently_closed":
+		return PlaceDetailsFieldMaskPermanentlyClosed, nil
+	case "photos":
+		return PlaceDetailsFieldMaskPhotos, nil
+	case "place_id":
+		return PlaceDetailsFieldMaskPlaceID, nil
+	case "price_level":
+		return PlaceDetailsFieldMaskPriceLevel, nil
+	case "rating":
+		return PlaceDetailsFieldMaskRatings, nil
+	case "user_ratings_total":
+		return PlaceDetailsFieldMaskUserRatingsTotal, nil
+	case "reviews":
+		return PlaceDetailsFieldMaskReviews, nil
+	case "scope":
+		return PlaceDetailsFieldMaskScope, nil
+	case "types":
+		return PlaceDetailsFieldMaskTypes, nil
+	case "url":
+		return PlaceDetailsFieldMaskURL, nil
+	case "utc_offset":
+		return PlaceDetailsFieldMaskUTCOffset, nil
+	case "vicinity":
+		return PlaceDetailsFieldMaskVicinity, nil
+	case "website":
+		return PlaceDetailsFieldMaskWebsite, nil
+	default:
+		return PlaceDetailsFieldMask(""), fmt.Errorf("Unknown PlaceDetailsFieldMask \"%v\"", placeDetailsFieldMask)
+	}
+}
+
+// fieldsAsStringArray converts []PlaceDetailsFieldMask to []string
+func placeDetailsFieldMasksAsStringArray(fields []PlaceDetailsFieldMask) []string {
+	var res []string
+	for _, el := range fields {
+		res = append(res, string(el))
+	}
+	return res
+}
+
+// PlaceSearchFieldMask allows you to specify which fields are to be returned with
+// a place search request. Please see the following URL for more detail:
+// https://cloud.google.com/maps-platform/user-guide/product-changes/#places
+type PlaceSearchFieldMask string
+
+// The individual Place Search Field Masks.
+const (
+	PlaceSearchFieldMaskAltID                        = PlaceSearchFieldMask("alt_id")
+	PlaceSearchFieldMaskBusinessStatus               = PlaceSearchFieldMask("business_status")
+	PlaceSearchFieldMaskFormattedAddress             = PlaceSearchFieldMask("formatted_address")
+	PlaceSearchFieldMaskGeometry                     = PlaceSearchFieldMask("geometry")
+	PlaceSearchFieldMaskGeometryLocation             = PlaceSearchFieldMask("geometry/location")
+	PlaceSearchFieldMaskGeometryLocationLat          = PlaceSearchFieldMask("geometry/location/lat")
+	PlaceSearchFieldMaskGeometryLocationLng          = PlaceSearchFieldMask("geometry/location/lng")
+	PlaceSearchFieldMaskGeometryViewport             = PlaceSearchFieldMask("geometry/viewport")
+	PlaceSearchFieldMaskGeometryViewportNortheast    = PlaceSearchFieldMask("geometry/viewport/northeast")
+	PlaceSearchFieldMaskGeometryViewportNortheastLat = PlaceSearchFieldMask("geometry/viewport/northeast/lat")
+	PlaceSearchFieldMaskGeometryViewportNortheastLng = PlaceSearchFieldMask("geometry/viewport/northeast/lng")
+	PlaceSearchFieldMaskGeometryViewportSouthwest    = PlaceSearchFieldMask("geometry/viewport/southwest")
+	PlaceSearchFieldMaskGeometryViewportSouthwestLat = PlaceSearchFieldMask("geometry/viewport/southwest/lat")
+	PlaceSearchFieldMaskGeometryViewportSouthwestLng = PlaceSearchFieldMask("geometry/viewport/southwest/lng")
+	PlaceSearchFieldMaskIcon                         = PlaceSearchFieldMask("icon")
+	PlaceSearchFieldMaskID                           = PlaceSearchFieldMask("id")
+	PlaceSearchFieldMaskName                         = PlaceSearchFieldMask("name")
+	PlaceSearchFieldMaskOpeningHours                 = PlaceSearchFieldMask("opening_hours")
+	PlaceSearchFieldMaskOpeningHoursOpenNow          = PlaceSearchFieldMask("opening_hours/open_now")
+	PlaceSearchFieldMaskPermanentlyClosed            = PlaceSearchFieldMask("permanently_closed")
+	PlaceSearchFieldMaskPhotos                       = PlaceSearchFieldMask("photos")
+	PlaceSearchFieldMaskPlaceID                      = PlaceSearchFieldMask("place_id")
+	PlaceSearchFieldMaskPriceLevel                   = PlaceSearchFieldMask("price_level")
+	PlaceSearchFieldMaskRating                       = PlaceSearchFieldMask("rating")
+	PlaceSearchFieldMaskUserRatingsTotal             = PlaceSearchFieldMask("user_ratings_total")
+	PlaceSearchFieldMaskReference                    = PlaceSearchFieldMask("reference")
+	PlaceSearchFieldMaskTypes                        = PlaceSearchFieldMask("types")
+	PlaceSearchFieldMaskVicinity                     = PlaceSearchFieldMask("vicinity")
+)
+
+// ParsePlaceSearchFieldMask will parse a string representation of
+// PlaceSearchFieldMask.
+func ParsePlaceSearchFieldMask(placeSearchFieldMask string) (PlaceSearchFieldMask, error) {
+	switch strings.ToLower(placeSearchFieldMask) {
+	case "alt_id":
+		return PlaceSearchFieldMaskAltID, nil
+	case "formatted_address":
+		return PlaceSearchFieldMaskFormattedAddress, nil
+	case "geometry":
+		return PlaceSearchFieldMaskGeometry, nil
+	case "geometry/location":
+		return PlaceSearchFieldMaskGeometryLocation, nil
+	case "geometry/location/lat":
+		return PlaceSearchFieldMaskGeometryLocationLat, nil
+	case "geometry/location/lng":
+		return PlaceSearchFieldMaskGeometryLocationLng, nil
+	case "geometry/viewport":
+		return PlaceSearchFieldMaskGeometryViewport, nil
+	case "geometry/viewport/northeast":
+		return PlaceSearchFieldMaskGeometryViewportNortheast, nil
+	case "geometry/viewport/northeast/lat":
+		return PlaceSearchFieldMaskGeometryViewportNortheastLat, nil
+	case "geometry/viewport/northeast/lng":
+		return PlaceSearchFieldMaskGeometryViewportNortheastLng, nil
+	case "geometry/viewport/southwest":
+		return PlaceSearchFieldMaskGeometryViewportSouthwest, nil
+	case "geometry/viewport/southwest/lat":
+		return PlaceSearchFieldMaskGeometryViewportSouthwestLat, nil
+	case "geometry/viewport/southwest/lng":
+		return PlaceSearchFieldMaskGeometryViewportSouthwestLng, nil
+	case "icon":
+		return PlaceSearchFieldMaskIcon, nil
+	case "id":
+		return PlaceSearchFieldMaskID, nil
+	case "name":
+		return PlaceSearchFieldMaskName, nil
+	case "opening_hours":
+		return PlaceSearchFieldMaskOpeningHours, nil
+	case "opening_hours/open_now":
+		return PlaceSearchFieldMaskOpeningHoursOpenNow, nil
+	case "permanently_closed":
+		return PlaceSearchFieldMaskPermanentlyClosed, nil
+	case "photos":
+		return PlaceSearchFieldMaskPhotos, nil
+	case "place_id":
+		return PlaceSearchFieldMaskPlaceID, nil
+	case "price_level":
+		return PlaceSearchFieldMaskPriceLevel, nil
+	case "rating":
+		return PlaceSearchFieldMaskRating, nil
+	case "user_ratings_total":
+		return PlaceSearchFieldMaskUserRatingsTotal, nil
+	case "reference":
+		return PlaceSearchFieldMaskReference, nil
+	case "types":
+		return PlaceSearchFieldMaskTypes, nil
+	case "vicinity":
+		return PlaceSearchFieldMaskVicinity, nil
+	default:
+		return PlaceSearchFieldMask(""), fmt.Errorf("Unknown PlaceSearchFieldMask \"%v\"", placeSearchFieldMask)
+	}
+}
+
+func placeSearchFieldMasksAsStringArray(fields []PlaceSearchFieldMask) []string {
+	var res []string
+	for _, el := range fields {
+		res = append(res, string(el))
+	}
+	return res
 }

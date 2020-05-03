@@ -21,6 +21,7 @@ APIs:
 - [Places API]
 - [Roads API]
 - [Time Zone API]
+- [Maps Static API]
 
 Keep in mind that the same [terms and conditions](https://developers.google.com/maps/terms) apply
 to usage of the APIs when they're accessed through this library.
@@ -40,7 +41,7 @@ contribute, please read [How to Contribute][contrib].
 
 ## Requirements
 
-- Go 1.5 or later.
+- Go 1.7 or later.
 - A Google Maps API key.
 
 ### API keys
@@ -63,6 +64,7 @@ To get an API key:
     - Places API
     - Roads API
     - Time Zone API
+    - Maps Static API
  1. Create a new **Server key**.
  1. If you'd like to restrict requests to a specific IP address, do so now.
 
@@ -95,6 +97,7 @@ Additional documentation for the included  web services is available at
 - [Places API]
 - [Time Zone API]
 - [Roads API]
+- [Maps Static API]
 
 ## Usage
 
@@ -104,10 +107,10 @@ Sample usage of the Directions API with an API key:
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/kr/pretty"
-	"golang.org/x/net/context"
 	"googlemaps.github.io/maps"
 )
 
@@ -141,10 +144,10 @@ documentation for the API you're using. For example, see the guide for the
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/kr/pretty"
-	"golang.org/x/net/context"
 	"googlemaps.github.io/maps"
 )
 
@@ -171,7 +174,7 @@ func main() {
 ### Rate limiting
 
 Never sleep between requests again! By default, requests are sent at the expected rate limits for
-each web service, typically 10 queries per second for free users. If you want to speed up or slow
+each web service, typically 50 queries per second for free users. If you want to speed up or slow
 down requests, you can do that too, using `maps.NewClient(maps.WithAPIKey(apiKey), maps.WithRateLimit(qps))`.
 
 ### Client IDs
@@ -190,7 +193,7 @@ Native objects for each of the API responses.
 [Maps documentation]: https://developers.google.com/maps/
 [Places documentation]: https://developers.google.com/places/
 
-[Google Maps API Web Services]: https://developers.google.com/maps/documentation/webservices/
+[Google Maps API Web Services]: https://developers.google.com/maps/apis-by-platform#web_service_apis
 [Directions API]: https://developers.google.com/maps/documentation/directions/
 [directions-client-id]: https://developers.google.com/maps/documentation/directions/get-api-key#client-id
 [directions-key]: https://developers.google.com/maps/documentation/directions/get-api-key#key
@@ -200,6 +203,7 @@ Native objects for each of the API responses.
 [Places API]: https://developers.google.com/places/web-service/
 [Roads API]: https://developers.google.com/maps/documentation/roads/
 [Time Zone API]: https://developers.google.com/maps/documentation/timezone/
+[Maps Static API]: https://developers.google.com/maps/documentation/maps-static/
 
 [issues]: https://github.com/googlemaps/google-maps-services-go/issues
 [contrib]: https://github.com/googlemaps/google-maps-services-go/blob/master/CONTRIB.md

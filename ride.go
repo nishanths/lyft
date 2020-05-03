@@ -30,33 +30,56 @@ func cmdRide(args []string, flags Flags) {
 
 func cmdRideCreate(args []string, flags Flags) {
 	inter := getInternal()
-	lyftClient := lyft.Client{AccessToken: inter.AccessToken}
+	lyftClient := lyft.NewClient(inter.AccessToken)
 
-	var r Route
-	if flags.routeName != "" {
-		var err error
-		r, err = routeByName(flags.routeName)
+	var start, end *Location
+
+	if flags.startPlace != "" {
+		loc, err := placeByName(flags.startPlace)
 		if err != nil {
-			log.Fatalf("route %q not found", flags.routeName)
+			log.Fatalf("place %q not found", flags.startPlace)
 		}
-	} else {
-		endPrompt := "Enter end location (can be empty): "
-		if flags.rideType() == lyft.RideTypeLine {
-			endPrompt = "Enter end location: "
-		}
-		s, e := interactiveRouteInput("Enter start location: ", endPrompt, geocodeClient)
-		r.Start = s
-		r.End = e
-		printRoute(s, e)
-		fmt.Fprintln(os.Stdout)
+		start = &loc
 	}
+	if flags.endPlace != "" {
+		loc, err := placeByName(flags.endPlace)
+		if err != nil {
+			log.Fatalf("place %q not found", flags.endPlace)
+		}
+		end = &loc
+	}
+
+	if start == nil {
+		loc, err := parseLocationInput(interactiveInput("Enter start location (street address or lat,lng): "), mapsClient)
+		if err != nil {
+			log.Fatal(err)
+		}
+		start = &loc
+	}
+	if end == nil {
+		prompt := "Enter end location (street address or lat,lng; can be empty): "
+		if flags.rideType() == lyft.RideTypeLine {
+			prompt = "Enter end location: "
+		}
+		str := interactiveInput(prompt)
+		if str != "" {
+			loc, err := parseLocationInput(str, mapsClient)
+			if err != nil {
+				log.Fatal(err)
+			}
+			end = &loc
+		}
+	}
+
+	printRoute(start, end)
+	fmt.Fprintln(os.Stdout)
 
 	req := lyft.RideRequest{
-		Origin:   lyft.Location{Latitude: r.Start.Lat, Longitude: r.Start.Lng, Address: r.Start.Address},
+		Origin:   lyft.Location{Latitude: start.Lat, Longitude: start.Lng, Address: start.Address},
 		RideType: flags.rideType(),
 	}
-	if r.End != nil {
-		req.Destination = lyft.Location{Latitude: r.End.Lat, Longitude: r.End.Lng, Address: r.End.Address}
+	if end != nil {
+		req.Destination = lyft.Location{Latitude: end.Lat, Longitude: end.Lng, Address: end.Address}
 	}
 
 	if flags.dryRun {
@@ -66,7 +89,7 @@ func cmdRideCreate(args []string, flags Flags) {
 	created, _, err := lyftClient.RequestRide(req)
 	if err != nil {
 		if lyft.IsTokenExpired(err) {
-			lyftClient.AccessToken = refreshAndWriteToken(inter)
+			lyftClient.SetAccessToken(refreshAndWriteToken(inter))
 			created, _, err = lyftClient.RequestRide(req)
 		}
 		if err != nil { // still an error?
@@ -84,11 +107,11 @@ func cmdRideCreate(args []string, flags Flags) {
 
 func cmdRideCancel(args []string, flags Flags) {
 	if len(args) == 0 {
-		usage()
+		log.Fatalf("must specify a <ride-id> to cancel")
 	}
 
 	inter := getInternal()
-	lyftClient := lyft.Client{AccessToken: inter.AccessToken}
+	lyftClient := lyft.NewClient(inter.AccessToken)
 
 	if flags.dryRun {
 		os.Exit(0)
@@ -118,7 +141,7 @@ cancel:
 	}
 
 	if lyft.IsTokenExpired(err) {
-		lyftClient.AccessToken = refreshAndWriteToken(inter)
+		lyftClient.SetAccessToken(refreshAndWriteToken(inter))
 		expireRetry = true
 		goto cancel
 	}
@@ -150,19 +173,19 @@ func parseNo(s string) (no bool) {
 
 func cmdRideStatus(args []string, flags Flags) {
 	if len(args) == 0 {
-		usage()
+		log.Fatalf("must specify a <ride-id> to check status")
 	}
 	rideStatus(args[0], flags.watch, flags.notifications)
 }
 
 func rideStatus(rideID string, watch, notifications bool) {
 	inter := getInternal()
-	lyftClient := lyft.Client{AccessToken: inter.AccessToken}
+	lyftClient := lyft.NewClient(inter.AccessToken)
 
 	detail, _, err := lyftClient.RideDetail(rideID)
 	if err != nil {
 		if lyft.IsTokenExpired(err) {
-			lyftClient.AccessToken = refreshAndWriteToken(inter)
+			lyftClient.SetAccessToken(refreshAndWriteToken(inter))
 			detail, _, err = lyftClient.RideDetail(rideID)
 		}
 		if err != nil { // still an error?
@@ -239,7 +262,7 @@ loop:
 		detail, _, err = lyftClient.RideDetail(rideID)
 		if err != nil {
 			if lyft.IsTokenExpired(err) {
-				lyftClient.AccessToken = refreshAndWriteToken(inter)
+				lyftClient.SetAccessToken(refreshAndWriteToken(inter))
 				detail, _, err = lyftClient.RideDetail(rideID)
 			}
 			if err != nil { // still an error?

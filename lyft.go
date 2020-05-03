@@ -1,44 +1,18 @@
 /*
 Command lyft can request and manage Lyft rides from the command line.
 
-Usage
-
-The command's syntax is
-
-  lyft [flags] <ride|route>
-
-Setup
-
-The program uses the following environment variables.
-
-  export GOOG_GEOCODE_KEY=<key>
-  export LYFT_CLIENT_ID=<key>
-  export LYFT_CLIENT_SECRET=<key>
-
-GOOG_GEOCODE_KEY is the Google Maps Geocode API key used to geocode street
-addresses. It can be obtained from
-
-  https://developers.google.com/maps/documentation/geocoding/get-api-key
-
-Lyft API keys can be obtained by following these steps
-
-  1. Sign in at https://www.lyft.com/developers/apps/new.
-  2. Create a new app. Enter any values for the app name and description.
-  3. Enter any unused local URL (e.g. http://localhost:90) for the Redirect URL.
-
-(The first time you request a ride, the program will request authorization
-to create rides on your behalf. Follow the instructions printed on screen.
-You will only have to do this step once.)
+usage: lyft [flags] <ride|place> [args]
 
 Flags
 
-The command's optional flags are
+The command's optional flags are:
 
-  -c <type>   Ride type: line, lyft, premier, lux, or luxsuv (default line).
-  -n          Dry-run; don't actually create or modify rides (default false).
-  -r <route>  Use the named route for the ride.
-  -t          Show desktop notifications (default false); macOS only.
-  -w          Watch ride status updates (default false).
+  -c <type>       Ride type: line, lyft, premier, lux, or luxsuv (default line).
+  -dry-run        Dry-run; don't actually create or modify rides (default false).
+  -end <place>    Use saved place as the starting location for the ride.
+  -notify         Show desktop notifications (default false), macOS only.
+  -start <place>  Use saved place as the start location for the ride.
+  -watch          Watch ride status updates (default false).
 
 Ride subcommand
 
@@ -48,34 +22,57 @@ The ride subcommand can create, cancel, and track the status of rides.
   lyft ride cancel <ride-id>
   lyft ride status <ride-id>
 
-Route subcommand
+Place subcommand
 
-The route subcommand can save routes for future use, so you don't have
-to enter full locations each time you create a ride. If name isn't specified,
-show prints all saved routes.
+The place subcommand can save ride start and end locations for future use,
+so you don't have to enter full addresses each time you create a ride. If
+a name isn't specified, the show subcommand prints all saved locations.
 
-  lyft route add    <name>
-  lyft route remove <name>...
-  lyft route show   [name]
+  lyft place add    <name>
+  lyft place remove <name>...
+  lyft place show   [name]
 
 Location input
 
-When prompted to enter a location, the input can be in either of these two
-formats
+When prompted to enter a start or an end location, the input can be in these two
+formats.
 
   1. Latitude/longitude pair in the format "lat,lng"
   2. Street address
 
+Setup
+
+The program uses the following environment variables.
+
+  GOOG_GEOCODE_KEY
+  LYFT_CLIENT_ID
+  LYFT_CLIENT_SECRET
+
+GOOG_GEOCODE_KEY is the Google Maps Geocode API key used to geocode street
+addresses. It can be obtained from:
+
+  https://developers.google.com/maps/documentation/geocoding/get-api-key
+
+The Lyft API keys can be obtained by following these steps.
+
+  1. Sign in at https://www.lyft.com/developers/apps/new.
+  2. Create a new app. Enter any values for the app name and description.
+  3. Enter any unused local URL (e.g. http://localhost:90) for the Redirect URL.
+
+(The first time you request a ride, the program will request authorization
+to create rides on your behalf. Follow the instructions printed on screen.
+You will only have to do this once.)
+
 Notes
 
-Only one passenger is supported for line rides requested by the program.
+Only one passenger is supported for Lyft Line rides requested by the program.
 
 You will receive notifications via your smartphone's Lyft app as you usual
-for rides created by this program, so you can skip the -t and -w flags if
-you wish.
+for rides created by this program, so you can skip the -notify and -watch
+flags if you wish.
 
-The program stores its data in a directory named .lyft in the user's home
-directory.
+The program stores program-relevant data in a directory named ".lyft" in the
+user's home directory.
 */
 package main
 
@@ -98,15 +95,16 @@ import (
 
 // TODO: implement ride update <ride-id>
 
-const help = `Usage: lyft [flags] <ride|route>
+const help = `usage: lyft [flags] <ride|place> [args...]
 
 Flags
 
-  -c <type>   Ride type: line, lyft, premier, lux, or luxsuv (default line).
-  -n          Dry-run; don't actually create or modify rides (default false).
-  -r <route>  Use the named route for the ride.
-  -t          Show desktop notifications (default false); macOS only.
-  -w          Watch ride status updates (default false).
+  -c <type>       Ride type: line, lyft, premier, lux, or luxsuv (default line).
+  -dry-run        Dry-run; don't actually create or modify rides (default false).
+  -end <place>    Use saved place as the starting location for the ride.
+  -notify         Show desktop notifications (default false), macOS only.
+  -start <place>  Use saved place as the start location for the ride.
+  -watch          Watch ride status updates (default false).
 
 The ride subcommand can create, cancel, and track the status of rides.
 
@@ -114,21 +112,19 @@ The ride subcommand can create, cancel, and track the status of rides.
   lyft ride cancel <ride-id>
   lyft ride status <ride-id>
 
-The route subcommand can save routes for future use, so you don't have
-to enter full locations each time you create a ride. If name isn't specified,
-show prints all saved routes.
+The place subcommand can save ride start and end locations for future use.
 
-  lyft route add    <name>
-  lyft route remove <name>...
-  lyft route show   [name]
+  lyft place add    <name>
+  lyft place remove <name>...
+  lyft place show   [name]
 
 The program uses the following environment variables.
 
-  export GOOG_GEOCODE_KEY=<key>
-  export LYFT_CLIENT_ID=<key>
-  export LYFT_CLIENT_SECRET=<key>
+  GOOG_GEOCODE_KEY
+  LYFT_CLIENT_ID
+  LYFT_CLIENT_SECRET
 
-See https://godoc.org/github.com/nishanths/lyft for more details.
+See https://godoc.org/github.com/nishanths/lyft for details.
 `
 
 func usage() {
@@ -139,7 +135,7 @@ func usage() {
 const (
 	rootDir      = ".lyft"
 	internalFile = "internal.json"
-	routesFile   = "routes.json"
+	placesFile   = "places.json"
 )
 
 const (
@@ -150,13 +146,13 @@ const (
 
 func main() {
 	log.SetFlags(0)
-	log.SetPrefix("lyft: ")
 
 	car := flag.String("c", "line", "")
-	routeName := flag.String("r", "", "")
-	notifications := flag.Bool("t", false, "")
-	dryRun := flag.Bool("n", false, "")
-	watch := flag.Bool("w", false, "")
+	startPlace := flag.String("start", "", "")
+	endPlace := flag.String("end", "", "")
+	notifications := flag.Bool("notify", false, "")
+	dryRun := flag.Bool("dry-run", false, "")
+	watch := flag.Bool("watch", false, "")
 
 	flag.Usage = usage
 	flag.Parse()
@@ -168,7 +164,8 @@ func main() {
 
 	flags := Flags{
 		car:           *car,
-		routeName:     *routeName,
+		startPlace:    *startPlace,
+		endPlace:      *endPlace,
 		notifications: *notifications,
 		dryRun:        *dryRun,
 		watch:         *watch || *notifications,
@@ -177,8 +174,8 @@ func main() {
 	switch args[0] {
 	case "ride":
 		cmdRide(args[1:], flags)
-	case "route":
-		cmdRoute(args[1:], flags)
+	case "place":
+		cmdPlace(args[1:])
 	default:
 		usage()
 	}
@@ -188,7 +185,8 @@ func main() {
 // to pass around as a single argument.
 type Flags struct {
 	car           string
-	routeName     string
+	startPlace    string
+	endPlace      string
 	notifications bool
 	dryRun        bool
 	watch         bool
@@ -222,10 +220,18 @@ func flagToRideType(r string) string {
 	return ""
 }
 
-// parseLocation attempts to parse str as as lat,lng pair
-// or a street address. The client function is invoked
+// Location is a latitude and longitude pair and an optional display
+// street address.
+type Location struct {
+	Lat     float64
+	Lng     float64
+	Address string
+}
+
+// parseLocationInput attempts to parse str as as lat,lng pair
+// or a street address. The maps client function is invoked
 // only if str was not a lat,lng (and hence geocoding is required).
-func parseLocation(str string, client func() *maps.Client) (Location, error) {
+func parseLocationInput(str string, mapsc func() *maps.Client) (Location, error) {
 	// Does it look like a lat,lng?
 	// NOTE: we need to check that the length is at least 2, otherwise
 	// maps.ParseLatLng panics internally due to an out of bounds access.
@@ -237,32 +243,19 @@ func parseLocation(str string, client func() *maps.Client) (Location, error) {
 		}
 	}
 	// OK, need to geocode street address.
-	loc, err := locationForAddress(str, client())
+	loc, err := locationFromStreetAddress(str, mapsc())
 	if err != nil {
 		return Location{}, fmt.Errorf("failed to determine coordinates for address %q: %s", "", err)
 	}
 	return loc, nil
 }
 
-// Route is a path from the start location to the end location.
-type Route struct {
-	Start, End *Location
-}
-
-// Location is a latitude and longitude pair and an optional display
-// street address.
-type Location struct {
-	Lat     float64
-	Lng     float64
-	Address string
-}
-
-// locationForAddress constructs a Location for the street address a.
+// locationFromStreetAddress constructs a Location for the street address a.
 // The returned Location's Address field may not be the same
 // value as the supplied street address. It is typically a cleaned-up form.
-func locationForAddress(a string, client *maps.Client) (Location, error) {
-	ctx := context.Background()
-	results, err := client.Geocode(ctx, &maps.GeocodingRequest{Address: a})
+func locationFromStreetAddress(a string, mapsc *maps.Client) (Location, error) {
+	ctx := context.TODO()
+	results, err := mapsc.Geocode(ctx, &maps.GeocodingRequest{Address: a})
 	if err != nil {
 		return Location{}, err
 	}
@@ -333,7 +326,7 @@ func scanLine() (string, error) {
 // googleMapsURL returns a deep-link to a Google Map for the
 // supplied lat,lng pair.
 func googleMapsURL(lat, lng float64) string {
-	// If this URL stops working, try:
+	// NOTE: If this URL stops working, try:
 	// https://maps.google.com/maps?q=24.197611,120.780512
 	// https://stackoverflow.com/q/30544268/3309046
 	return fmt.Sprintf("https://www.google.com/maps/place/%f,%f", lat, lng)

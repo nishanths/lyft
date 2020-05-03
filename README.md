@@ -1,27 +1,31 @@
-## lyft [![Build Status](https://travis-ci.org/nishanths/lyft.svg?branch=master)](https://travis-ci.org/nishanths/lyft)
+## lyft
+
+[![GoDoc](https://godoc.org/github.com/nishanths/lyft?status.svg)](https://godoc.org/github.com/nishanths/lyft)
+[![Build Status](https://travis-ci.org/nishanths/lyft.svg?branch=master)](https://travis-ci.org/nishanths/lyft)
 
 Create and manage Lyft rides from the command line.
 
 ```sh
 # Install
-go get -u github.com/nishanths/lyft
+go get github.com/nishanths/lyft
 
-# ...
-# Follow the setup instructions in the 'Setup' section below
-# ...
+# Set up env vars (see 'Setup' heading below)
+export GOOG_GEOCODE_KEY=<key>
+export LYFT_CLIENT_ID=<key>
+export LYFT_CLIENT_SECRET=<key>
 
 # Create rides
 lyft ride create
 lyft ride cancel <ride-id>
 lyft ride status <ride-id>
 
-# Save routes for future use
-lyft route add    <name>
-lyft route remove <name>...
-lyft route show   [name]
+# Save places for future use when creating rides
+lyft plac add    <name>
+lyft plac remove <name>...
+lyft plac show   [name]
 
-# Help documentation
-lyft -help
+# Help
+lyft -help # or https://godoc.org/github.com/nishanths/lyft
 ```
 
 Lyft Line isn't available on Lyft's web application (October 2017),
@@ -29,22 +33,16 @@ but this program can help you order Line rides from your computer.
 
 ## Setup
 
-[![GoDoc](https://godoc.org/github.com/nishanths/lyft?status.svg)](https://godoc.org/github.com/nishanths/lyft)
-
 The program uses the following environment variables.
 
 ```
-export GOOG_GEOCODE_KEY=<key>
-export LYFT_CLIENT_ID=<key>
-export LYFT_CLIENT_SECRET=<key>
+GOOG_GEOCODE_KEY
+LYFT_CLIENT_ID
+LYFT_CLIENT_SECRET
 ```
 
-See the [Setup](https://godoc.org/github.com/nishanths/lyft#hdr-Setup)
-section in godoc to set them up.
-
-(The first time you request a ride, the program will request authorization
-to create rides on your behalf. Follow the instructions printed on screen.
-You will only have to do this step once.)
+Refer to the [Setup](https://godoc.org/github.com/nishanths/lyft#hdr-Setup)
+section in godoc to set these up.
 
 ## Example
 

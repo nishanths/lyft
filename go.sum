@@ -1,0 +1,8 @@
+github.com/google/uuid v1.1.1 h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=
+github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
+github.com/nishanths/lyft-go v0.0.0-20181124045008-e9ebf91faba2 h1:zI8pOVtUnmQfyrDex87KWCmG+47djJUuMsgTZv5iP1Q=
+github.com/nishanths/lyft-go v0.0.0-20181124045008-e9ebf91faba2/go.mod h1:4Fc9JM+4GR65ongGuxm0+fgFroBvKXlBZSYFmLyIz7s=
+golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1 h1:NusfzzA6yGQ+ua51ck7E3omNUX/JuqbFSaRGqU8CcLI=
+golang.org/x/time v0.0.0-20200416051211-89c76fbcd5d1/go.mod h1:tRJNPiyCQ0inRvYxbN9jk5I+vvW/OXSQhTDSoE431IQ=
+googlemaps.github.io/maps v1.1.2 h1:2Atd3jbOTzsr/wFdzJ065KQsNfIBE7yJqh0JL8Nu0x0=
+googlemaps.github.io/maps v1.1.2/go.mod h1:ez+qLvSMuh8umNcocEEhPy3q8NAG4Otq1w09YVqCBgU=
