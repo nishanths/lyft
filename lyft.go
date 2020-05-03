@@ -11,7 +11,7 @@ The command's optional flags are:
 
   -c <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -dry-run        Dry-run; don't actually create or modify rides (default false).
-  -end <place>    Use saved place as the starting location for the ride.
+  -end <place>    Use saved place as the end location for the ride.
   -notify         Show desktop notifications (default false), macOS only.
   -start <place>  Use saved place as the start location for the ride.
   -watch          Watch ride status updates (default false).
@@ -103,7 +103,7 @@ Flags
 
   -c <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -dry-run        Dry-run; don't actually create or modify rides (default false).
-  -end <place>    Use saved place as the starting location for the ride.
+  -end <place>    Use saved place as the end location for the ride.
   -notify         Show desktop notifications (default false), macOS only.
   -start <place>  Use saved place as the start location for the ride.
   -watch          Watch ride status updates (default false).
