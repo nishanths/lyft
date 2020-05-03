@@ -9,7 +9,7 @@ Flags
 
 The command's optional flags are:
 
-  -c <type>       Ride type: line, lyft, premier, lux, or luxsuv (default line).
+  -c <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -dry-run        Dry-run; don't actually create or modify rides (default false).
   -end <place>    Use saved place as the starting location for the ride.
   -notify         Show desktop notifications (default false), macOS only.
@@ -101,7 +101,7 @@ const help = `usage: lyft [flags] <ride|place> [args...]
 
 Flags
 
-  -c <type>       Ride type: line, lyft, premier, lux, or luxsuv (default line).
+  -c <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -dry-run        Dry-run; don't actually create or modify rides (default false).
   -end <place>    Use saved place as the starting location for the ride.
   -notify         Show desktop notifications (default false), macOS only.
