@@ -134,14 +134,14 @@ func revokeToken(clientID, clientSecret, a string) (http.Header, error) {
 }
 
 func obtainAuthorizationCode(c Config) string {
-	const preface = `To create rides, the program needs authorization to create rides on your behalf.
+	const preface = `The program requires authorization to create rides on your behalf.
 Follow the instructions below to grant authorization. (You will only have to do
 this once.)`
 
 	u := threeleg.AuthorizationURL(c.ClientID, []string{auth.Public, auth.RidesRead, auth.Offline, auth.RidesRequest}, "")
 
 	fmt.Fprintf(os.Stdout, "%s\n\n", preface)
-	fmt.Fprintf(os.Stdout, "First, visit this URL in your browser and click the Accept button: \n%s\n\n", u)
+	fmt.Fprintf(os.Stdout, "Visit the URL below in your browser and click the Accept button: \n%s\n\n", u)
 	time.Sleep(1 * time.Second) // waiting helps make the successive prompt more understandable.
 	link := interactiveInput("Then, copy/paste the URL you are redirected to and hit Enter: ")
 

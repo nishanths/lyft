@@ -3,17 +3,17 @@ Command lyft can request and manage Lyft rides from the command line.
 
 Usage
 
-  lyft [flags] <ride|place> [args]
+  lyft [flags] [ride|place] [subcommand args...]
 
 Flags
 
-The command's optional flags are:
+The command's optional flags for the "ride create" subcommand are:
 
   -c <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -dry-run        Dry-run; don't actually create or modify rides (default false).
-  -end <place>    Use saved place as the end location for the ride.
+  -to <place>     Use saved place as the end location for the ride.
   -notify         Show desktop notifications (default false), macOS only.
-  -start <place>  Use saved place as the start location for the ride.
+  -from <place>   Use saved place as the start location for the ride.
   -watch          Watch ride status updates (default false).
 
 Ride subcommand
@@ -97,15 +97,15 @@ import (
 
 // TODO: implement ride update <ride-id>
 
-const help = `usage: lyft [flags] <ride|place> [args...]
+const help = `usage: lyft [flags] [ride|place] [subcommand args...]
 
-Flags
+Flags for "ride create" subcommand
 
   -c <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -dry-run        Dry-run; don't actually create or modify rides (default false).
-  -end <place>    Use saved place as the end location for the ride.
+  -to <place>     Use saved place as the end location for the ride.
   -notify         Show desktop notifications (default false), macOS only.
-  -start <place>  Use saved place as the start location for the ride.
+  -from <place>   Use saved place as the start location for the ride.
   -watch          Watch ride status updates (default false).
 
 The ride subcommand can create, cancel, and track the status of rides.
@@ -150,8 +150,8 @@ func main() {
 	log.SetFlags(0)
 
 	car := flag.String("c", "line", "")
-	startPlace := flag.String("start", "", "")
-	endPlace := flag.String("end", "", "")
+	startPlace := flag.String("from", "", "")
+	endPlace := flag.String("to", "", "")
 	notifications := flag.Bool("notify", false, "")
 	dryRun := flag.Bool("dry-run", false, "")
 	watch := flag.Bool("watch", false, "")
