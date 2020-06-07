@@ -7,7 +7,7 @@ Usage
 
 Flags
 
-The command's optional flags for the "ride create" subcommand are:
+The command's optional flags are:
 
   -type <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -dry-run           Dry-run; don't actually create or modify rides (default false).
@@ -99,7 +99,7 @@ import (
 
 const help = `usage: lyft [flags] [ride|place] [subcommand args...]
 
-Flags for "ride create" subcommand
+Flags
 
   -type <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
   -dry-run           Dry-run; don't actually create or modify rides (default false).

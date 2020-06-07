@@ -97,10 +97,12 @@ func cmdRideCreate(args []string, flags Flags) {
 		}
 	}
 	fmt.Fprintf(os.Stdout, "Created Ride ID: %s\n", created.RideID)
+	fmt.Fprintf(os.Stdout, "Cancel the ride: lyft ride cancel %s\n", created.RideID)
 
 	if flags.watch {
 		rideStatus(created.RideID, flags.watch, flags.notifications)
 	} else {
+		fmt.Fprintf(os.Stdout, "Watch ride status: lyft -watch ride status %s\n", created.RideID)
 		os.Exit(0)
 	}
 }
