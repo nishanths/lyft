@@ -9,12 +9,12 @@ Flags
 
 The command's optional flags for the "ride create" subcommand are:
 
-  -c <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
-  -dry-run        Dry-run; don't actually create or modify rides (default false).
-  -to <place>     Use saved place as the end location for the ride.
-  -notify         Show desktop notifications (default false), macOS only.
-  -from <place>   Use saved place as the start location for the ride.
-  -watch          Watch ride status updates (default false).
+  -type <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
+  -dry-run           Dry-run; don't actually create or modify rides (default false).
+  -to <place>        Use saved place as the end location for the ride.
+  -notify            Show desktop notifications (default false), macOS only.
+  -from <place>      Use saved place as the start location for the ride.
+  -watch             Watch ride status updates (default false).
 
 Ride subcommand
 
@@ -101,12 +101,12 @@ const help = `usage: lyft [flags] [ride|place] [subcommand args...]
 
 Flags for "ride create" subcommand
 
-  -c <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
-  -dry-run        Dry-run; don't actually create or modify rides (default false).
-  -to <place>     Use saved place as the end location for the ride.
-  -notify         Show desktop notifications (default false), macOS only.
-  -from <place>   Use saved place as the start location for the ride.
-  -watch          Watch ride status updates (default false).
+  -type <ride-type>  Ride type: line, lyft, premier, lux, or luxsuv (default line).
+  -dry-run           Dry-run; don't actually create or modify rides (default false).
+  -to <place>        Use saved place as the end location for the ride.
+  -notify            Show desktop notifications (default false), macOS only.
+  -from <place>      Use saved place as the start location for the ride.
+  -watch             Watch ride status updates (default false).
 
 The ride subcommand can create, cancel, and track the status of rides.
 
@@ -149,7 +149,7 @@ const (
 func main() {
 	log.SetFlags(0)
 
-	car := flag.String("c", "line", "")
+	car := flag.String("type", "line", "")
 	startPlace := flag.String("from", "", "")
 	endPlace := flag.String("to", "", "")
 	notifications := flag.Bool("notify", false, "")
